@@ -4,7 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - cubePrefab: {instanceID: 0}
+  - planePrefab: {fileID: 4056992237812563194, guid: 56dba28ae9fcb234793a5ee56c3f888c, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

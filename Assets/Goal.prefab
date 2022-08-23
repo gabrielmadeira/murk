@@ -208,5 +208,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a1e5a708b01af44a60b0873173d0a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubePrefab: {fileID: 386453193753701611}
-  planeScale: 30
+  planePrefab: {fileID: 4056992237812563194, guid: 56dba28ae9fcb234793a5ee56c3f888c, type: 3}

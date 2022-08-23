@@ -10,8 +10,11 @@ public class PlayerController : MonoBehaviour
     public float speed, sprintSpeed, slowSpeed, sensitivity, maxForce;
     private Vector2 move, look;
     private float lookRotation;
+
     private bool lockRotation = false;
+
     AudioSource audioSrc;
+
     bool isMoving = false;
 
     public void OnMove(InputAction.CallbackContext context)
@@ -27,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
+        ChangeSound();
     }
 
     void Move()
@@ -38,33 +42,25 @@ public class PlayerController : MonoBehaviour
         Vector3 currentVelocity = rb.velocity;
         Vector3 targetVelocity = new Vector3(move.x,0,move.y);
 
-        if(targetVelocity[0] != 0 || targetVelocity[2] != 0)
-            isMoving = true;
-        else    
-            isMoving = false;
-        
-        if(isMoving) {
-            if (!audioSrc.isPlaying)
-                audioSrc.Play();
-        }else{
-            audioSrc.Stop();
-        }
-
-
         if (isSprinting)
         {
             targetVelocity *= sprintSpeed;
-            audioSrc.pitch = 1.5f;
         }
         else if (isSlower)
         {
             targetVelocity *= slowSpeed;
-            audioSrc.pitch = 0.5f;
         }
         else
         {
             targetVelocity *= speed;
-            audioSrc.pitch = 1.0f;
+        }
+
+        // Detects if the player is trying move
+        if (targetVelocity.magnitude > 0.3f) {
+            isMoving = true;
+        }
+        else {
+            isMoving = false;
         }
 
         //Align direction
@@ -105,5 +101,34 @@ public class PlayerController : MonoBehaviour
     void LateUpdate()
     {
         Look();
+    }
+
+    void ChangeSound()
+    {   
+        // If the player is trying to move
+        if(isMoving) {
+            // Start the audio if it hasn't already
+            if (!audioSrc.isPlaying)
+                audioSrc.Play();
+
+            // Changes the audio according to his speed
+            audioSrc.volume = Mathf.Pow((rb.velocity.magnitude-0.1f)/(sprintSpeed-0.1f), 1.46f);
+            
+            audioSrc.pitch = rb.velocity.magnitude/3;
+            if (audioSrc.pitch > 1.8)
+            {
+                audioSrc.pitch = 1.8f;
+            }
+            else if (audioSrc.pitch < 0.5f)
+            {
+                audioSrc.pitch = 0.5f;
+            }
+        }
+        else if (audioSrc.volume > 0f) {
+            audioSrc.volume *= 0.85f;
+        }
+        else{
+            audioSrc.Stop();
+        }
     }
 }

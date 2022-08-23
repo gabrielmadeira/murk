@@ -527,7 +527,7 @@ MonoBehaviour:
   rb: {fileID: 1180955280}
   camHolder: {fileID: 1027883281}
   speed: 3
-  sprintSpeed: 60
+  sprintSpeed: 6
   slowSpeed: 1
   sensitivity: 0.1
   maxForce: 1

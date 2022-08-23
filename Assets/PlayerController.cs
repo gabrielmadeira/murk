@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 move, look;
     private float lookRotation;
     private bool lockRotation = false;
+    AudioSource audioSrc;
+    bool isMoving = false;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -35,17 +37,34 @@ public class PlayerController : MonoBehaviour
         //find target velocity
         Vector3 currentVelocity = rb.velocity;
         Vector3 targetVelocity = new Vector3(move.x,0,move.y);
+
+        if(targetVelocity[0] != 0 || targetVelocity[2] != 0)
+            isMoving = true;
+        else    
+            isMoving = false;
+        
+        if(isMoving) {
+            if (!audioSrc.isPlaying)
+                audioSrc.Play();
+        }else{
+            audioSrc.Stop();
+        }
+
+
         if (isSprinting)
         {
             targetVelocity *= sprintSpeed;
+            audioSrc.pitch = 1.5f;
         }
         else if (isSlower)
         {
             targetVelocity *= slowSpeed;
+            audioSrc.pitch = 0.5f;
         }
         else
         {
             targetVelocity *= speed;
+            audioSrc.pitch = 1.0f;
         }
 
         //Align direction
@@ -79,6 +98,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        audioSrc = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

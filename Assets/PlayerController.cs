@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody rb;
     public GameObject camHolder;
+    public GameObject soundBroadcast;
+
     public float speed, sprintSpeed, slowSpeed, sensitivity, maxForce;
     private Vector2 move, look;
     private float lookRotation;
@@ -14,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private bool lockRotation = false;
 
     AudioSource audioSrc;
+    private float broadcastedSound;
 
     bool isMoving = false;
 
@@ -35,8 +38,8 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-       bool isSlower = Input.GetKey(KeyCode.LeftShift);
-       bool isSprinting = Input.GetKey(KeyCode.Space);
+        bool isSlower = Input.GetKey(KeyCode.LeftShift);
+        bool isSprinting = Input.GetKey(KeyCode.Space);
 
         //find target velocity
         Vector3 currentVelocity = rb.velocity;
@@ -95,6 +98,7 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         audioSrc = GetComponent<AudioSource>();
+        audioSrc.volume = 0f;
     }
 
     // Update is called once per frame
@@ -124,11 +128,21 @@ public class PlayerController : MonoBehaviour
                 audioSrc.pitch = 0.5f;
             }
         }
-        else if (audioSrc.volume > 0f) {
+        else if (audioSrc.volume > 0.00001f) {
             audioSrc.volume *= 0.85f;
         }
         else{
+            audioSrc.volume = 0f;
             audioSrc.Stop();
         }
+
+        //Calcula a distancia até onde será ouvido o som do player.
+        broadcastedSound = Mathf.Sqrt(10000*audioSrc.volume+1f);
+        if (float.IsNaN(broadcastedSound))
+        {
+            broadcastedSound = 1f;
+        }
+
+        soundBroadcast.transform.localScale = new Vector3(broadcastedSound, 0.1f, broadcastedSound);
     }
 }

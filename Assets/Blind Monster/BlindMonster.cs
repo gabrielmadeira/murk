@@ -14,8 +14,7 @@ public class BlindMonster : MonoBehaviour
     private float scale_x;
     private float scale_z;
 
-    private float randomX;
-    private float randomZ;
+    private Vector2 randomXZ;
 
     private float patrolSpeed = 3;
     private float huntSpeed = 5;
@@ -27,7 +26,7 @@ public class BlindMonster : MonoBehaviour
     private bool walkPointSet = false;
 
     // Last place player was seen at
-    private Vector3 lastSeenAt;
+    private Vector3 lastHeardAt;
 
     private bool isHearingPlayer = false;
     private float attentionSpam = 0f; 
@@ -58,42 +57,42 @@ public class BlindMonster : MonoBehaviour
         // Poorly made state machine:
         if (isHearingPlayer) // Hunt State
         {
-            //Debug.Log("Ouvindo " + attentionSpam);
             pace = huntSpeed;
             audioSrc.volume = 1f;
 
             Hunt();
+
+            Debug.Log("Ouvindo " + attentionSpam);
         }
-        else if (attentionSpam > 0) { // Clueless State
+        else if (attentionSpam >= 0.1f) { // Clueless State
             attentionSpam -= Time.deltaTime; // Counts down the monster's attention spam
 
-            //Debug.Log("Prestando atenção " + attentionSpam);
             pace = patrolSpeed + (huntSpeed-patrolSpeed)*attentionSpam/15; // Gradually desacelerates the monster
             audioSrc.volume = 0.04f + 0.96f*attentionSpam/15; // Gradually makes the monster more silent
+            
             Clueless();
+
+            Debug.Log("Prestando atenção " + attentionSpam);
         }
-        else if (attentionSpam < 0) { // Stopped State
+        else if (attentionSpam <= 0) { // Stopped State
             attentionSpam += Time.deltaTime;
 
-            //Debug.Log("Parado " + attentionSpam);
+            Debug.Log("Parado " + attentionSpam);
         }
         else { // Patrol State
-            //Debug.Log("NAO Ouvindo " + attentionSpam);
             pace = patrolSpeed;
             audioSrc.volume = 0.04f;
 
             Patrol();
+
+            Debug.Log("NAO Ouvindo " + attentionSpam);
         }
         if (attentionSpam >= 0)
             Move();
-
-        if (Mathf.Abs(attentionSpam) < 0.1f) {
-            attentionSpam = 0f;
-        }
     }
 
-    // Moves the monster
     void Move() {
+        // Moves the monster
         //Debug.Log("Walk Point = " + walkPoint);
         distanceToWalkPoint = transform.position-walkPoint;
 
@@ -118,18 +117,20 @@ public class BlindMonster : MonoBehaviour
 
     // Hunts
     private void Hunt() {
-        walkPoint = lastSeenAt; //Just goes to where the player was last seen;
+        walkPoint = lastHeardAt; //Just goes to where the player was last seen;
     }
 
     // Clueless
     private void Clueless() {
         if (!walkPointSet) {
             // Goes somewhere random from where you last were
-            randomX = lastSeenAt.x + Random.Range(-15,15);
-            randomZ = lastSeenAt.z + Random.Range(-15,15);
+            randomXZ = Random.insideUnitCircle * 17;
+            randomXZ[0] += lastHeardAt.x;
+            randomXZ[1] += lastHeardAt.z;
+
             SetWithingBounds();
 
-            walkPoint = new Vector3(randomX, transform.position.y, randomZ);
+            walkPoint = new Vector3(randomXZ[0], transform.position.y, randomXZ[1]);
             walkPointSet = true;
         }
         else {
@@ -144,13 +145,13 @@ public class BlindMonster : MonoBehaviour
     // Patrols
     private void Patrol() {
         if (!walkPointSet) {
-            if (Random.Range(0,100) > 50)
+            if (Random.Range(0,100) > 50) // Has a 50% chance of stopping
             {
-                attentionSpam = Random.Range(-10f,-5f);
+                attentionSpam = Random.Range(-10f,-5f); // Stops for 5 to 10 seconds
             }
             else
             {
-                SearchWalkPoint();
+                SearchWalkPoint(); // Finds a new walkpoint
             }
         }
         else {
@@ -164,28 +165,30 @@ public class BlindMonster : MonoBehaviour
 
     // Creates a new point to walk to 
     private void SearchWalkPoint() {
-        randomX = transform.position.x + Random.Range(-40,40);
-        randomZ = transform.position.z + Random.Range(-40,40);
+        randomXZ = Random.insideUnitCircle * 45;
+        randomXZ[0] += transform.position.x;
+        randomXZ[1] += transform.position.z;
+        
         SetWithingBounds();
 
-        walkPoint = new Vector3(randomX, transform.position.y, randomZ);
+        walkPoint = new Vector3(randomXZ[0], transform.position.y, randomXZ[1]);
         walkPointSet = true;  
     }
 
     // Sets random walk to be within walls
     private void SetWithingBounds() {
-        if (randomX > 0) {
-            randomX = Mathf.Min(scale_x, randomX);
+        if (randomXZ[0] > 0) {
+            randomXZ[0] = Mathf.Min(scale_x, randomXZ[0]);
         }
         else {
-            randomX = Mathf.Max(-scale_x, randomX);
+            randomXZ[0] = Mathf.Max(-scale_x, randomXZ[0]);
         }
 
-        if (randomZ > 0) {
-            randomZ = Mathf.Min(scale_z, randomZ);
+        if (randomXZ[1] > 0) {
+            randomXZ[1] = Mathf.Min(scale_z, randomXZ[1]);
         }
         else {
-            randomZ = Mathf.Max(-scale_z, randomZ);
+            randomXZ[1] = Mathf.Max(-scale_z, randomXZ[1]);
         }
     }
 
@@ -198,18 +201,20 @@ public class BlindMonster : MonoBehaviour
             attentionSpam = Random.Range(15f,25f);
         }
     }
+
     void OnTriggerStay(Collider other) {
         if (other.gameObject.tag == "SoundArea") {
-            lastSeenAt = other.gameObject.transform.position;
+            lastHeardAt = other.gameObject.transform.position;
         }
     }
+
     void OnTriggerExit(Collider other) {
         if (other.gameObject.tag == "SoundArea") {
             isHearingPlayer = false;
         }
     }
 
-    // On collision, kills player
+    // On collision with a player, kills player
     void OnCollisionEnter(Collision col) {
         if (col.gameObject.tag == "Player") {
             Destroy(col.gameObject);

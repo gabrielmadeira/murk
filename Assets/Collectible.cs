@@ -18,6 +18,15 @@ public class Collectible : MonoBehaviour
 
     // Audio source (Hino)
     AudioSource audioData;
+    public GameObject noiseBroadcast;
+
+    public float updateStep = 0.05f;
+    public int sampleDataLength = 1024;
+ 
+    private float currentUpdateTime = 0f;
+ 
+    private float clipLoudness;
+    private float[] clipSampleData;
 
     // Start is called before the first frame update
     void Start()
@@ -34,12 +43,19 @@ public class Collectible : MonoBehaviour
             scale_z = 0;
         }
         ChangePostion();
+
+        clipSampleData = new float[sampleDataLength];
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         transform.localRotation = Quaternion.Euler(90f, Time.time * 100f, 0);
+    }
+
+    void Update()
+    {
+        ChangeNoiseBroadcast();
     }
 
     void OnTriggerEnter(Collider other)
@@ -60,6 +76,23 @@ public class Collectible : MonoBehaviour
         transform.position = randomPosition;
 
         StartAudio();
+    }
+
+    void ChangeNoiseBroadcast()
+    {
+        currentUpdateTime += Time.deltaTime;
+        if (currentUpdateTime >= updateStep) {
+             currentUpdateTime = 0f;
+
+            audioData.clip.GetData(clipSampleData, audioData.timeSamples); //I read 1024 samples, which is about 80 ms on a 44khz stereo clip, beginning at the current sample position of the clip.
+            clipLoudness = 0f;
+            foreach (var sample in clipSampleData) {
+                clipLoudness += Mathf.Abs(sample);
+            }
+            clipLoudness /= sampleDataLength; //clipLoudness is what you are looking for
+
+            noiseBroadcast.transform.localScale = new Vector3(0.1f, 200*(clipLoudness)*155f, 200*(clipLoudness)*2.5f);
+        }
     }
 
     void StartAudio()

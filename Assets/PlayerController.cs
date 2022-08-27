@@ -142,6 +142,7 @@ public class PlayerController : MonoBehaviour
         {
             broadcastedSound = 1f;
         }
+        //Debug.Log(broadcastedSound);
 
         soundBroadcast.transform.localScale = new Vector3(broadcastedSound, 0.1f, broadcastedSound);
     }

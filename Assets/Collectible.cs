@@ -62,6 +62,8 @@ public class Collectible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            other.gameObject.GetComponent<PlayerController>().coinsCollected++;
+            Debug.Log(other.gameObject.GetComponent<PlayerController>().coinsCollected);
             OnCollected?.Invoke();
             ChangePostion();
         }

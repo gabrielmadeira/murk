@@ -8,12 +8,13 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public GameObject camHolder;
     public GameObject soundBroadcast;
+    public int coinsCollected = 0;
 
     public float speed, sprintSpeed, slowSpeed, sensitivity, maxForce;
     private Vector2 move, look;
     private float lookRotation;
 
-    private bool lockRotation = false;
+    private bool lockRotation = true;
 
     AudioSource audioSrc;
     private float broadcastedSound;

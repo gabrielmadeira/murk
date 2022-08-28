@@ -18,8 +18,11 @@ public class BlindMonsterHuntState : BlindMonsterBaseState
         monster.uncertaintyZonePrefab.transform.localScale = new Vector3(monster.uncertaintyZoneDiameter, 0.1f, monster.uncertaintyZoneDiameter);
 
         // Creates the uncertainty zone
-        monster.uncertaintyZone = Object.Instantiate(monster.uncertaintyZonePrefab, monster.playerLastHeardAt, Quaternion.Euler(0, 0, 0));
-
+        monster.uncertaintyZone = Object.Instantiate(monster.uncertaintyZonePrefab, monster.playerLastHeardAt, Quaternion.Euler(0, 0, 0)); //, monster.itself.transform);
+        
+        // Gives it a name
+        monster.uncertaintyZone.name = monster.name + " Uncertainty Zone";
+        
         // Adjusts the height of the uncertainty zone display (DUMB CODE)
         monster.uncertaintyZone.transform.position = new Vector3(monster.playerLastHeardAt.x, 0.15f, monster.playerLastHeardAt.z);
     }

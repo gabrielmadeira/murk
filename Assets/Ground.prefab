@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4056992237812563194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 25, y: 1, z: 25}
+  m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -112,5 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallPrefab: {fileID: 7775812621625712426, guid: 06dd84caecdb521408a1b958ad5dc96c, type: 3}
+  playerPreFab: {fileID: 0}
   blindMonsterPrefab: {fileID: 5153226794655895856, guid: 153b4c20837c82641a35b15778f672a4, type: 3}
   goalPrefab: {fileID: 6282800942365001137, guid: ab29ef6bfcd138340986282f6a52321a, type: 3}
+  numberOfBlindMonsters: 2

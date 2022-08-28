@@ -6,6 +6,7 @@ public class BlindMonsterStateManager : MonoBehaviour
 {
     public Rigidbody rb;
     public AudioSource audioSrc;
+    public GameObject itself; //Weird code
 
     // Uncertainty zone
     public GameObject uncertaintyZonePrefab;
@@ -70,14 +71,6 @@ public class BlindMonsterStateManager : MonoBehaviour
     void OnTriggerExit(Collider other) {
         currentState.OnTriggerExitState(this, other);
     }
-
-    // On collision with a player, kills player
-    void OnCollisionEnter(Collision col) {
-        if (col.gameObject.tag == "Player") {
-            Destroy(col.gameObject);
-        }
-    }
-
 
     public void SwitchState(BlindMonsterBaseState state) {
         // Transitions to the new state passed in

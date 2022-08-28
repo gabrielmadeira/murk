@@ -147,4 +147,11 @@ public class PlayerController : MonoBehaviour
 
         soundBroadcast.transform.localScale = new Vector3(broadcastedSound, 0.1f, broadcastedSound);
     }
+
+    // On collision with a monster, kills player
+    void OnCollisionEnter(Collision col) {
+        if (col.gameObject.tag == "Monster") {
+            Destroy(gameObject);
+        }
+    }
 }

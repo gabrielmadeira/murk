@@ -242,6 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 5153226794655903439}
   audioSrc: {fileID: 5153226794655895857}
+  itself: {fileID: 5153226794655895856}
   uncertaintyZonePrefab: {fileID: 2993707240885819843, guid: 98ed2db556b9df542bb96c1fe4e6eb59, type: 3}
   uncertaintyZone: {fileID: 0}
   playerLastHeardAt: {x: 0, y: 0, z: 0}

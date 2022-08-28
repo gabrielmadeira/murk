@@ -5,8 +5,11 @@ using UnityEngine;
 public class GroundScrip : MonoBehaviour
 {
     public GameObject wallPrefab;
+    public GameObject playerPreFab;
     public GameObject blindMonsterPrefab;
     public GameObject goalPrefab;
+
+    public int numberOfBlindMonsters;
 
     private float scale_x;
     private float scale_z;
@@ -34,33 +37,47 @@ public class GroundScrip : MonoBehaviour
     void BuildWalls()
     {
         wallPrefab.transform.localScale = new Vector3(2*scale_z, 4, 2);
-        wallPrefab.name = "East Wall";
-        Instantiate(wallPrefab, new Vector3(scale_x, 1.98f, 0), Quaternion.Euler(0, 90, 0));
-        wallPrefab.name = "West Wall";
-        Instantiate(wallPrefab, new Vector3(-scale_x, 1.98f, 0), Quaternion.Euler(0, 90, 0));
+        
+        GameObject wall1 = Instantiate(wallPrefab, new Vector3(scale_x, 1.98f, 0), Quaternion.Euler(0, 90, 0));
+        wall1.name = "East Wall";
+
+        GameObject wall2 = Instantiate(wallPrefab, new Vector3(-scale_x, 1.98f, 0), Quaternion.Euler(0, 90, 0));
+        wall2.name = "West Wall";
+
 
         wallPrefab.transform.localScale = new Vector3(2*scale_x, 4, 2);
-        wallPrefab.name = "North Wall";
-        Instantiate(wallPrefab, new Vector3(0, 1.98f, scale_z), Quaternion.Euler(0, 0, 0));
-        wallPrefab.name = "South Wall";
-        Instantiate(wallPrefab, new Vector3(0, 1.98f, -scale_z), Quaternion.Euler(0, 0, 0));
+
+        GameObject wall3 = Instantiate(wallPrefab, new Vector3(0, 1.98f, scale_z), Quaternion.Euler(0, 0, 0));
+        wall3.name = "North Wall";
+
+        GameObject wall4 = Instantiate(wallPrefab, new Vector3(0, 1.98f, -scale_z), Quaternion.Euler(0, 0, 0));
+        wall4.name = "South Wall";
     }
 
     void SpawnMonster() {
-        do { // Looks for a place to spawn the monster far from the player
-            randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
-            Debug.Log(randomPosition);
-        } while (Vector3.Magnitude(randomPosition) < (scale_x+scale_z)/2);
+        
+        int monstersPlaced = 0;
+        while (monstersPlaced < numberOfBlindMonsters)
+        {
+            do { // Looks for a place to spawn the monster far from the player
+                randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
+                Debug.Log(randomPosition);
+            } while (Vector3.Magnitude(randomPosition) < (scale_x+scale_z)/2);
 
-        Instantiate(blindMonsterPrefab, randomPosition, blindMonsterPrefab.transform.localRotation);
+            GameObject monster = Instantiate(blindMonsterPrefab, randomPosition, blindMonsterPrefab.transform.localRotation);
+
+            monstersPlaced ++; // Counts the monster just instantiated
+
+            monster.name = "Monster " + monstersPlaced; // Gives the monster a number
+        }
     }
 
     void PlaceGoal() {
-        do { // Looks for a place to spawn the monster far from the player
-            randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),2,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
-            Debug.Log(randomPosition);
+        do { // Looks for a place to spawn the goal far from the player
+        randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),2,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
         } while (Vector3.Magnitude(randomPosition) < (scale_x+scale_z)/2);
 
-        Instantiate(goalPrefab, randomPosition, goalPrefab.transform.localRotation);
+        GameObject goal = Instantiate(goalPrefab, randomPosition, goalPrefab.transform.localRotation);
+        goal.name = "Goal";
     }
 }

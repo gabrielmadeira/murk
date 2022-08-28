@@ -10,7 +10,7 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
         Debug.Log("Patrol");
 
         monster.pace = monster.patrolSpeed;
-        monster.audioSrc.volume = 0.04f;
+        monster.audioSrc.volume = monster.minVol;
     }
 
     public override void FixedUpdateState(BlindMonsterStateManager monster) {
@@ -34,6 +34,7 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
 
     public override void OnTriggerEnterState(BlindMonsterStateManager monster, Collider other) {
         if (other.gameObject.tag == "SoundArea") {
+            monster.playerLastHeardAt = other.gameObject.transform.position;
             monster.SwitchState(monster.HuntState);
         }
     }
@@ -47,14 +48,15 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
     }
 
     private void SearchWalkPoint(BlindMonsterStateManager monster) {
-        // Creates a new point to walk to 
-        Vector2 randomXZ = Random.insideUnitCircle * 45;
-        randomXZ[0] += monster.transform.position.x;
-        randomXZ[1] += monster.transform.position.z;
-        
-        monster.SetWithingBounds(randomXZ);
+        // Creates a new point to walk to it
+        walkPoint = monster.transform.position;
 
-        walkPoint = new Vector3(randomXZ[0], monster.transform.position.y, randomXZ[1]);
+        Vector2 randomXZ = Random.insideUnitCircle * 45;
+        walkPoint.x += randomXZ[0];
+        walkPoint.z += randomXZ[1];
+
+        walkPoint = monster.SetWithingBounds(walkPoint);
+
         walkPointSet = true;  
     }
 

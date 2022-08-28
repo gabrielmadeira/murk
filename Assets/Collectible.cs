@@ -17,7 +17,7 @@ public class Collectible : MonoBehaviour
     private Vector3 randomPosition;
 
     // Audio source (Hino)
-    AudioSource audioData;
+    public AudioSource audioData;
     public GameObject noiseBroadcast;
 
     public float updateStep = 0.05f;
@@ -42,7 +42,6 @@ public class Collectible : MonoBehaviour
         {
             scale_z = 0;
         }
-        ChangePostion();
 
         clipSampleData = new float[sampleDataLength];
     }
@@ -55,7 +54,7 @@ public class Collectible : MonoBehaviour
 
     void Update()
     {
-        ChangeNoiseBroadcast();
+        //ChangeNoiseBroadcast();
     }
 
     void OnTriggerEnter(Collider other)
@@ -84,7 +83,7 @@ public class Collectible : MonoBehaviour
     {
         currentUpdateTime += Time.deltaTime;
         if (currentUpdateTime >= updateStep) {
-             currentUpdateTime = 0f;
+            currentUpdateTime = 0f;
 
             audioData.clip.GetData(clipSampleData, audioData.timeSamples); //I read 1024 samples, which is about 80 ms on a 44khz stereo clip, beginning at the current sample position of the clip.
             clipLoudness = 0f;

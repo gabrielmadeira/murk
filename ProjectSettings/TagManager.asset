@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SoundArea
   - NoiseArea
+  - Monster
   layers:
   - Default
   - TransparentFX

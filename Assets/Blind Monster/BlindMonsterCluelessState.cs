@@ -6,19 +6,28 @@ public class BlindMonsterCluelessState : BlindMonsterBaseState
     private bool walkPointSet;
 
     private float attentionSpam;
+    private float startingAttentionSpam;
 
     public override void EnterState(BlindMonsterStateManager monster) {
         Debug.Log("Clueless");
 
-        monster.pace = monster.patrolSpeed + (monster.huntSpeed-monster.patrolSpeed)*attentionSpam/15; // Gradually desacelerates the monster
-        monster.audioSrc.volume = 0.04f + 0.96f*attentionSpam/15; // Gradually makes the monster more silent
-
         walkPointSet = false;
-        attentionSpam = Random.Range(15f,25f);
     }
 
     public override void FixedUpdateState(BlindMonsterStateManager monster) {
-        attentionSpam -= Time.deltaTime;
+        monster.certainty -= Time.deltaTime/20; // Reduces the certainty of the monster as time passes
+        if (monster.certainty < 0)
+        {
+            Object.Destroy(monster.uncertaintyZone); // Destroys Uncertainty zone
+            monster.SwitchState(monster.PatrolState);
+        }
+
+        monster.pace = monster.patrolSpeed + (monster.huntSpeed-monster.patrolSpeed)*monster.certainty; // Adjusts the monster's speed based on his certainty
+        monster.audioSrc.volume = monster.minVol + (1-monster.minVol)*monster.certainty; // Adjusts the monster's volume based on his certainty
+
+        // Increases the uncertaintyZone cause it has less idea of where the player is
+        monster.uncertaintyZoneDiameter += 1.5f*Time.deltaTime;
+        monster.uncertaintyZone.transform.localScale = new Vector3(monster.uncertaintyZoneDiameter, 0.1f, monster.uncertaintyZoneDiameter);
 
         if (!walkPointSet)
             SearchWalkPoint(monster); // Finds a new walkpoint
@@ -32,10 +41,18 @@ public class BlindMonsterCluelessState : BlindMonsterBaseState
             }
         }
         Move(monster, walkPoint);
+        Debug.Log("Cluless" + walkPoint + " Certainty: " + monster.certainty);
     }
 
     public override void OnTriggerEnterState(BlindMonsterStateManager monster, Collider other) {
         if (other.gameObject.tag == "SoundArea") {
+            Object.Destroy(monster.uncertaintyZone); // Destroys Uncertainty zone before making a new one
+
+            float error = Vector3.Distance(monster.playerLastHeardAt, other.gameObject.transform.position); // Gets error in the AI's prediction of the player position
+            if (error > monster.uncertaintyZoneDiameter/2) // Adjusts the certainty according to the error
+                monster.certainty = Mathf.Max(0,(monster.uncertaintyZoneDiameter-error)/monster.uncertaintyZoneDiameter);
+
+            monster.playerLastHeardAt = other.gameObject.transform.position;
             monster.SwitchState(monster.HuntState);
         }
     }
@@ -50,14 +67,13 @@ public class BlindMonsterCluelessState : BlindMonsterBaseState
 
     private void SearchWalkPoint(BlindMonsterStateManager monster) {
         // Creates a new point to walk to 
-        Vector2 randomXZ = Random.insideUnitCircle * 17;
-        randomXZ[0] += monster.playerLastHeardAt.x;
-        randomXZ[1] += monster.playerLastHeardAt.z;
+        walkPoint = new Vector3(monster.playerLastHeardAt.x, monster.transform.position.y, monster.playerLastHeardAt.z);
+        Vector2 randomXZ = Random.insideUnitCircle * monster.uncertaintyZoneDiameter/2;
+        walkPoint.x += randomXZ[0];
+        walkPoint.z += randomXZ[1];
 
-        monster.SetWithingBounds(randomXZ);
+        walkPoint = monster.SetWithingBounds(walkPoint);
 
-        walkPoint = new Vector3(randomXZ[0], monster.transform.position.y, randomXZ[1]);
-        Debug.Log("Cluless" + walkPoint);
         walkPointSet = true;  
     }
 }

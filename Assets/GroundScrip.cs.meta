@@ -5,6 +5,7 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - wallPrefab: {fileID: 7775812621625712426, guid: 06dd84caecdb521408a1b958ad5dc96c, type: 3}
+  - blindMonsterPrefab: {fileID: 5153226794655895856, guid: 153b4c20837c82641a35b15778f672a4, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -15,11 +15,12 @@ public class BlindMonsterStopState : BlindMonsterBaseState
         if (restingSeconds <= 0)
             monster.SwitchState(monster.PatrolState); 
 
-        Debug.Log("Stop" + restingSeconds + "s");
+        Debug.Log("Stop " + restingSeconds + "s");
     }
 
     public override void OnTriggerEnterState(BlindMonsterStateManager monster, Collider other) {
         if (other.gameObject.tag == "SoundArea") {
+            monster.playerLastHeardAt = other.gameObject.transform.position;
             monster.SwitchState(monster.HuntState);
         }
     }

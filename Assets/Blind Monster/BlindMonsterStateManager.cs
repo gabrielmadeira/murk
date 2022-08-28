@@ -7,6 +7,17 @@ public class BlindMonsterStateManager : MonoBehaviour
     public Rigidbody rb;
     public AudioSource audioSrc;
 
+    // Uncertainty zone
+    public GameObject uncertaintyZonePrefab;
+    [HideInInspector]
+    public GameObject uncertaintyZone;
+    [HideInInspector]
+    public Vector3 playerLastHeardAt;
+    [HideInInspector]
+    public float certainty;
+    [HideInInspector]
+    public float uncertaintyZoneDiameter;
+
     // Ground
     public GameObject planePrefab;
 
@@ -16,13 +27,12 @@ public class BlindMonsterStateManager : MonoBehaviour
     [HideInInspector]
     public float scale_z;
 
+    public float minVol = 0.15f;
+
     public float patrolSpeed = 3;
     public float huntSpeed = 5;
     [HideInInspector]
     public float pace;
-
-    [HideInInspector]
-    public Vector3 playerLastHeardAt;
 
     BlindMonsterBaseState currentState;
     public BlindMonsterCluelessState CluelessState = new BlindMonsterCluelessState();
@@ -84,7 +94,6 @@ public class BlindMonsterStateManager : MonoBehaviour
         {
             scale_x = 0;
         }
-
         scale_z = 10*planePrefab.transform.localScale.z/2-2;
         if (scale_z < 0)
         {
@@ -92,20 +101,22 @@ public class BlindMonsterStateManager : MonoBehaviour
         }
     }
 
-    public void SetWithingBounds(Vector2 randomXZ) {
+    public Vector3 SetWithingBounds(Vector3 walkPoint) {
         // Sets random destination to be within walls
-        if (randomXZ[0] > 0) {
-            randomXZ[0] = Mathf.Min(scale_x, randomXZ[0]);
+        if (walkPoint.x > 0) {
+            walkPoint.x = Mathf.Min(scale_x, walkPoint.x);
         }
         else {
-            randomXZ[0] = Mathf.Max(-scale_x, randomXZ[0]);
+            walkPoint.x = Mathf.Max(-scale_x, walkPoint.x);
         }
 
-        if (randomXZ[1] > 0) {
-            randomXZ[1] = Mathf.Min(scale_z, randomXZ[1]);
+        if (walkPoint.z > 0) {
+            walkPoint.z = Mathf.Min(scale_z, walkPoint.z);
         }
         else {
-            randomXZ[1] = Mathf.Max(-scale_z, randomXZ[1]);
+            walkPoint.z = Mathf.Max(-scale_z, walkPoint.z);
         }
+
+        return walkPoint;
     }
 }

@@ -61,7 +61,6 @@ public class GroundScrip : MonoBehaviour
         {
             do { // Looks for a place to spawn the monster far from the player
                 randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
-                Debug.Log(randomPosition);
             } while (Vector3.Magnitude(randomPosition) < (scale_x+scale_z)/2);
 
             GameObject monster = Instantiate(blindMonsterPrefab, randomPosition, blindMonsterPrefab.transform.localRotation);
@@ -74,7 +73,7 @@ public class GroundScrip : MonoBehaviour
 
     void PlaceGoal() {
         do { // Looks for a place to spawn the goal far from the player
-        randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),2,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
+            randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),2,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
         } while (Vector3.Magnitude(randomPosition) < (scale_x+scale_z)/2);
 
         GameObject goal = Instantiate(goalPrefab, randomPosition, goalPrefab.transform.localRotation);

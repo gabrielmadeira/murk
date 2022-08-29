@@ -16,10 +16,13 @@ public class PlayerController : MonoBehaviour
 
     private bool lockRotation = true;
 
-    AudioSource audioSrc;
+    public AudioSource audioSrcSteps;
+    public AudioSource audioSrcBreath;
     private float broadcastedSound;
 
-    bool isMoving = false;
+    private bool isMoving = false;
+
+    private float breath;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -33,6 +36,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Debug.Log("Breath: " + breath + " Breath sound: " + audioSrcBreath.volume);
         Move();
         ChangeSound();
     }
@@ -49,14 +53,17 @@ public class PlayerController : MonoBehaviour
         if (isSprinting)
         {
             targetVelocity *= sprintSpeed;
+            breath *= 1-0.01f*Time.deltaTime;
         }
         else if (isSlower)
         {
             targetVelocity *= slowSpeed;
+            breath *= 1+0.01f*Time.deltaTime;
         }
-        else
+        else // If the player is walking
         {
             targetVelocity *= speed;
+            breath *= 1+0.005f*Time.deltaTime;
         }
 
         // Detects if the player is trying move
@@ -65,7 +72,12 @@ public class PlayerController : MonoBehaviour
         }
         else {
             isMoving = false;
+            breath *= 1+0.03f*Time.deltaTime;
         }
+        
+        breath = Mathf.Max(Mathf.Min(breath, 1),0); // Limits cumulative breath maximum to 1 (100%)
+
+        targetVelocity *= breath; // Reduces the player's speed as it gets tired
 
         //Align direction
         targetVelocity = transform.TransformDirection(targetVelocity);
@@ -98,8 +110,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        audioSrc = GetComponent<AudioSource>();
-        audioSrc.volume = 0f;
+        audioSrcSteps.volume = 0f;
+        breath = 1; // Player starts with max breath
     }
 
     // Update is called once per frame
@@ -110,35 +122,11 @@ public class PlayerController : MonoBehaviour
 
     void ChangeSound()
     {   
-        // If the player is trying to move
-        if(isMoving) {
-            // Start the audio if it hasn't already
-            if (!audioSrc.isPlaying)
-                audioSrc.Play();
-
-            // Changes the audio according to his speed
-            audioSrc.volume = Mathf.Pow((rb.velocity.magnitude-0.1f)/(sprintSpeed-0.1f), 1.46f);
-            
-            audioSrc.pitch = rb.velocity.magnitude/3;
-            if (audioSrc.pitch > 1.8)
-            {
-                audioSrc.pitch = 1.8f;
-            }
-            else if (audioSrc.pitch < 0.5f)
-            {
-                audioSrc.pitch = 0.5f;
-            }
-        }
-        else if (audioSrc.volume > 0.00001f) {
-            audioSrc.volume *= 0.85f;
-        }
-        else{
-            audioSrc.volume = 0f;
-            audioSrc.Stop();
-        }
+        ChangeSoundSteps();
+        ChangeSoundBreath();
 
         //Calcula a distancia até onde será ouvido o som do player.
-        broadcastedSound = Mathf.Sqrt(10000*audioSrc.volume+1f);
+        broadcastedSound = Mathf.Sqrt(10000*(audioSrcSteps.volume+audioSrcBreath.volume)+1f);
         if (float.IsNaN(broadcastedSound))
         {
             broadcastedSound = 1f;
@@ -146,6 +134,39 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(broadcastedSound);
 
         soundBroadcast.transform.localScale = new Vector3(broadcastedSound, 0.1f, broadcastedSound);
+    }
+
+    void ChangeSoundSteps() {
+        // If the player is trying to move
+        if(isMoving) {
+            // Start the audio if it hasn't already
+            if (!audioSrcSteps.isPlaying)
+                audioSrcSteps.Play();
+
+            // Changes the audio according to his speed
+            audioSrcSteps.volume = Mathf.Pow((rb.velocity.magnitude-0.1f)/(sprintSpeed-0.1f), 1.46f);
+            
+            audioSrcSteps.pitch = rb.velocity.magnitude/3; // Adjusts pitch (audio playing speed) according to the velocity of the player
+            if (audioSrcSteps.pitch > 1.8) // Limits maximum pitch
+            {
+                audioSrcSteps.pitch = 1.8f;
+            }
+            else if (audioSrcSteps.pitch < 0.5f) // Limits minimum pitch
+            {
+                audioSrcSteps.pitch = 0.5f;
+            }
+        }
+        else if (audioSrcSteps.volume > 0.00001f) {
+            audioSrcSteps.volume *= 0.85f;
+        }
+        else{
+            audioSrcSteps.volume = 0f;
+            audioSrcSteps.Stop();
+        }
+    }
+
+    void ChangeSoundBreath() {
+        audioSrcBreath.volume = 1-Mathf.Pow(breath,3);
     }
 
     // On collision with a monster, kills player

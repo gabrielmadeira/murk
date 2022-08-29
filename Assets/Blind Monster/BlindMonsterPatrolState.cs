@@ -11,7 +11,7 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
     private float walkAttemptDuration;
 
     public override void EnterState(BlindMonsterStateManager monster) {
-        Debug.Log("Patrol");
+        //Debug.Log("Patrol");
 
         monster.pace = monster.patrolSpeed;
         monster.audioSrc.volume = monster.minVol;
@@ -52,7 +52,7 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
             }   
         }
         Move(monster, walkPoint);
-        Debug.Log("Patrolling" + walkPoint);
+        //Debug.Log("Patrolling" + walkPoint);
     }
 
     public override void OnTriggerEnterState(BlindMonsterStateManager monster, Collider other) {

@@ -6,7 +6,6 @@ public class BlindMonsterStateManager : MonoBehaviour
 {
     public Rigidbody rb;
     public AudioSource audioSrc;
-    public GameObject itself; //Weird code
 
     // Uncertainty zone
     public GameObject uncertaintyZonePrefab;

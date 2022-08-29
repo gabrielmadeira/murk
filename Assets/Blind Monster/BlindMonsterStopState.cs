@@ -5,7 +5,7 @@ public class BlindMonsterStopState : BlindMonsterBaseState
     private float restingSeconds = 1f; 
 
     public override void EnterState(BlindMonsterStateManager monster) {
-        Debug.Log("Stop");
+        //Debug.Log("Stop");
 
         restingSeconds = Random.Range(2f,5f); // Escolhe quanto tempo vai descansar, variando de 2 a 10s
     }
@@ -15,7 +15,7 @@ public class BlindMonsterStopState : BlindMonsterBaseState
         if (restingSeconds <= 0)
             monster.SwitchState(monster.PatrolState); 
 
-        Debug.Log("Stop " + restingSeconds + "s");
+        //Debug.Log("Stop " + restingSeconds + "s");
     }
 
     public override void OnTriggerEnterState(BlindMonsterStateManager monster, Collider other) {

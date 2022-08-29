@@ -9,7 +9,7 @@ public class BlindMonsterCluelessState : BlindMonsterBaseState
     private float startingAttentionSpam;
 
     public override void EnterState(BlindMonsterStateManager monster) {
-        Debug.Log("Clueless");
+        //Debug.Log("Clueless");
 
         walkPointSet = false;
     }
@@ -41,7 +41,7 @@ public class BlindMonsterCluelessState : BlindMonsterBaseState
             }
         }
         Move(monster, walkPoint);
-        Debug.Log("Cluless" + walkPoint + " Certainty: " + monster.certainty);
+        //Debug.Log("Cluless" + walkPoint + " Certainty: " + monster.certainty);
     }
 
     public override void OnTriggerEnterState(BlindMonsterStateManager monster, Collider other) {

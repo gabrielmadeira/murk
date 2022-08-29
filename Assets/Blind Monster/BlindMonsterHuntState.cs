@@ -6,7 +6,7 @@ public class BlindMonsterHuntState : BlindMonsterBaseState
     private float timePersuing;
 
     public override void EnterState(BlindMonsterStateManager monster) {
-        Debug.Log("Hunt");
+        //Debug.Log("Hunt");
 
         monster.certainty = Mathf.Max(0.05f,monster.certainty);
 
@@ -38,7 +38,7 @@ public class BlindMonsterHuntState : BlindMonsterBaseState
 
         Move(monster, monster.playerLastHeardAt);
 
-        Debug.Log("Hunt " + monster.playerLastHeardAt + " Certainty: " + monster.certainty);
+        //Debug.Log("Hunt " + monster.playerLastHeardAt + " Certainty: " + monster.certainty);
     }
 
     public override void OnTriggerEnterState(BlindMonsterStateManager monster, Collider other) {

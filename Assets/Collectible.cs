@@ -28,6 +28,8 @@ public class Collectible : MonoBehaviour
     private float clipLoudness;
     private float[] clipSampleData;
 
+    private float noiseReach;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -92,7 +94,15 @@ public class Collectible : MonoBehaviour
             }
             clipLoudness /= sampleDataLength; //clipLoudness is what you are looking for
 
-            noiseBroadcast.transform.localScale = new Vector3(0.1f, 200*(clipLoudness)*155f, 200*(clipLoudness)*2.5f);
+            //Calcula a distancia até onde será ouvido o som do goal.
+            noiseReach = Mathf.Sqrt(50000*clipLoudness+1f);
+            if (float.IsNaN(noiseReach))
+            {
+                noiseReach = 1f;
+            }
+
+            noiseBroadcast.transform.localScale = new Vector3(0.1f, noiseReach*155f, noiseReach*2.5f);
+            
         }
     }
 

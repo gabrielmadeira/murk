@@ -5,7 +5,7 @@ using UnityEngine;
 public class GroundScrip : MonoBehaviour
 {
     public GameObject wallPrefab;
-    public GameObject playerPreFab;
+    public GameObject playerPrefab;
     public GameObject blindMonsterPrefab;
     public GameObject goalPrefab;
 
@@ -14,6 +14,7 @@ public class GroundScrip : MonoBehaviour
     private float scale_x;
     private float scale_z;
 
+    private Vector3 playerStartingPosition;
     private Vector3 randomPosition;
 
     // Start is called before the first frame update
@@ -21,6 +22,8 @@ public class GroundScrip : MonoBehaviour
     {
         scale_x = 10*transform.localScale.x/2;
         scale_z = 10*transform.localScale.z/2;
+
+        PlacePlayer();
 
         BuildWalls();
         SpawnMonster();
@@ -31,6 +34,16 @@ public class GroundScrip : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void PlacePlayer()
+    {
+        // Looks for a random place to spawn player
+        playerStartingPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
+
+        // Spawns it
+        GameObject player = Instantiate(playerPrefab, playerStartingPosition, playerPrefab.transform.localRotation);
+        player.name = "Player";
     }
 
     // Builds walls of the right size for the plane
@@ -61,7 +74,7 @@ public class GroundScrip : MonoBehaviour
         {
             do { // Looks for a place to spawn the monster far from the player
                 randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
-            } while (Vector3.Magnitude(randomPosition) < (scale_x+scale_z)/2);
+            } while (Vector3.Distance(randomPosition, playerStartingPosition) < (scale_x+scale_z)/2);
 
             GameObject monster = Instantiate(blindMonsterPrefab, randomPosition, blindMonsterPrefab.transform.localRotation);
 
@@ -74,7 +87,7 @@ public class GroundScrip : MonoBehaviour
     void PlaceGoal() {
         do { // Looks for a place to spawn the goal far from the player
             randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),2,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
-        } while (Vector3.Magnitude(randomPosition) < (scale_x+scale_z)/2);
+        } while (Vector3.Distance(randomPosition, playerStartingPosition) < (scale_x+scale_z)/2);
 
         GameObject goal = Instantiate(goalPrefab, randomPosition, goalPrefab.transform.localRotation);
         goal.name = "Goal";

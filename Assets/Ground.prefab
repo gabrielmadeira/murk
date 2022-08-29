@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallPrefab: {fileID: 7775812621625712426, guid: 06dd84caecdb521408a1b958ad5dc96c, type: 3}
-  playerPreFab: {fileID: 0}
+  playerPrefab: {fileID: 5626499424307299194, guid: c3ff72e7c6f3b5149b9ddabe2c118167, type: 3}
   blindMonsterPrefab: {fileID: 5153226794655895856, guid: 153b4c20837c82641a35b15778f672a4, type: 3}
   goalPrefab: {fileID: 6282800942365001137, guid: ab29ef6bfcd138340986282f6a52321a, type: 3}
   numberOfBlindMonsters: 1

@@ -16,13 +16,23 @@ public class PlayerController : MonoBehaviour
 
     private bool lockRotation = true;
 
+    // - SOUND -------------- 
     public AudioSource audioSrcSteps;
     public AudioSource audioSrcBreath;
-    private float broadcastedSound;
+    private float breath;
+
+    private float audioReach;
+
+    public float updateStep = 0.05f;
+    public int sampleDataLength = 1024;
+ 
+    private float currentUpdateTime = 0f;
+ 
+    private float clipLoudness;
+    private float[] clipSampleData;
+    //------------------------
 
     private bool isMoving = false;
-
-    private float breath;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -112,6 +122,8 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         audioSrcSteps.volume = 0f;
         breath = 1; // Player starts with max breath
+
+        clipSampleData = new float[sampleDataLength];
     }
 
     // Update is called once per frame
@@ -125,15 +137,28 @@ public class PlayerController : MonoBehaviour
         ChangeSoundSteps();
         ChangeSoundBreath();
 
-        //Calcula a distancia até onde será ouvido o som do player.
-        broadcastedSound = Mathf.Sqrt(10000*(audioSrcSteps.volume+audioSrcBreath.volume)+1f);
-        if (float.IsNaN(broadcastedSound))
-        {
-            broadcastedSound = 1f;
-        }
-        //Debug.Log(broadcastedSound);
+        currentUpdateTime += Time.deltaTime;
+        if (currentUpdateTime >= updateStep) {
+            currentUpdateTime = 0f;
 
-        soundBroadcast.transform.localScale = new Vector3(broadcastedSound, 0.1f, broadcastedSound);
+            //Calcula a distancia até onde será ouvido o som do player.
+            audioReach = Mathf.Sqrt(500000*(ClipLoudnessCalculator(audioSrcSteps)+ClipLoudnessCalculator(audioSrcBreath))+1f);
+            if (float.IsNaN(audioReach))
+            {
+                audioReach = 1f;
+            }
+            //Debug.Log(audioReach);
+            soundBroadcast.transform.localScale = new Vector3(audioReach, 0.1f, audioReach);   
+        }
+    }
+
+    float ClipLoudnessCalculator(AudioSource audioSrc) {
+        audioSrc.clip.GetData(clipSampleData, audioSrc.timeSamples); //I read 1024 samples, which is about 80 ms on a 44khz stereo clip, beginning at the current sample position of the clip.
+        clipLoudness = 0f;
+        foreach (var sample in clipSampleData) {
+            clipLoudness += Mathf.Abs(sample);
+        }
+        return clipLoudness * audioSrc.volume / sampleDataLength;
     }
 
     void ChangeSoundSteps() {

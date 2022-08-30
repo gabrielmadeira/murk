@@ -320,7 +320,7 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.74
+    x: 0.77
     y: 0.6
     width: 1
     height: 1
@@ -371,5 +371,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a26b036505649cd4aad3c598bcbef7bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planePrefab: {fileID: 4056992237812563194, guid: 56dba28ae9fcb234793a5ee56c3f888c, type: 3}
   topDownCamera: {fileID: 1392870098}

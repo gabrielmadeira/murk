@@ -52,6 +52,7 @@ public class Collectible : MonoBehaviour
     void FixedUpdate()
     {
         transform.localRotation = Quaternion.Euler(90f, Time.time * 100f, 0);
+        audioData.volume = (0.4f+0.6f*Mathf.Sin(Time.time/3)); // PROVISÓRIO
     }
 
     void Update()

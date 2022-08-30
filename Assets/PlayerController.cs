@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class PlayerController : MonoBehaviour
     public GameObject camHolder;
     public GameObject soundBroadcast;
     public int coinsCollected = 0;
+
+    // - CAMERA -------------
+    public Camera darkCamera;
+    // ----------------------
 
     public float speed, sprintSpeed, slowSpeed, sensitivity, maxForce;
     private Vector2 move, look;
@@ -49,6 +54,9 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Breath: " + breath + " Breath sound: " + audioSrcBreath.volume);
         Move();
         ChangeSound();
+
+        if (Input.GetKey(KeyCode.Escape))
+            EndGame();
     }
 
     void Move()
@@ -119,6 +127,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        darkCamera.enabled = !OptionsMenu.isDebugMode; // Turns on the black view camera is debug mode is off
+        
         Cursor.lockState = CursorLockMode.Locked;
         audioSrcSteps.volume = 0f;
         breath = 1; // Player starts with max breath
@@ -181,7 +191,7 @@ public class PlayerController : MonoBehaviour
                 audioSrcSteps.pitch = 0.5f;
             }
         }
-        else if (audioSrcSteps.volume > 0.00001f) {
+        else if (audioSrcSteps.volume > 0.00001f) { // Slowly fades away the walking sound
             audioSrcSteps.volume *= 0.85f;
         }
         else{
@@ -194,10 +204,15 @@ public class PlayerController : MonoBehaviour
         audioSrcBreath.volume = 1-Mathf.Pow(breath,3);
     }
 
-    // On collision with a monster, kills player
+    // On collision with a monster, ends the game
     void OnCollisionEnter(Collision col) {
         if (col.gameObject.tag == "Monster") {
-            Destroy(gameObject);
+            EndGame();
         }
+    }
+
+    void EndGame() { // Ends game by going back to menu
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene(0);
     }
 }

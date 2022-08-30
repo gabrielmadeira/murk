@@ -20,6 +20,8 @@ public class GroundScrip : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.localScale = new Vector3(OptionsMenu.mapSizeX, 1, OptionsMenu.mapSizeZ);
+
         scale_x = 10*transform.localScale.x/2;
         scale_z = 10*transform.localScale.z/2;
 
@@ -42,7 +44,7 @@ public class GroundScrip : MonoBehaviour
         playerStartingPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
 
         // Spawns it
-        GameObject player = Instantiate(playerPrefab, playerStartingPosition, playerPrefab.transform.localRotation);
+        GameObject player = Instantiate(playerPrefab, playerStartingPosition, Quaternion.Euler(0, Random.Range(0,360), 0));
         player.name = "Player";
     }
 

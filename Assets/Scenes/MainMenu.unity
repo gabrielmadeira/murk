@@ -1299,7 +1299,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1276286200}
   - component: {fileID: 1276286201}
-  - component: {fileID: 1276286202}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -1343,26 +1342,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee9d38f64d058644be0adc203bbc836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  voiceAudioSrc: {fileID: 1276286202}
-  welcomeAudio: {fileID: 8300000, guid: 174c9e0a079db2f44925a5a118fb84ca, type: 3}
-  menuAudio: {fileID: 8300000, guid: 4961fdfeb6d583b48bf5e704d023a207, type: 3}
-  startSelectedAudio: {fileID: 8300000, guid: 18efeb700a886b94c9e2075a794a560b, type: 3}
-  settingsSelectedAudio: {fileID: 8300000, guid: 16b99c7603bab414696d0a0540c0461d, type: 3}
-  quitSelectedAudio: {fileID: 8300000, guid: 8472253839e2ba148aea33284b4091ae, type: 3}
+  ObjectMusic: {fileID: 0}
+  welcomeAudio: {fileID: 8300000, guid: 239f5a7caf30bd34ba21a7ae0f49b62d, type: 3}
+  menuAudio: {fileID: 8300000, guid: 8322d8f79180cee42a44a3b2e2fa5ed3, type: 3}
+  startSelectedAudio: {fileID: 8300000, guid: 2b4ba784132584e418f5137fcbad7fcf, type: 3}
+  settingsSelectedAudio: {fileID: 8300000, guid: 984397b7ff5de3845936bc40bece99b2, type: 3}
+  quitSelectedAudio: {fileID: 8300000, guid: ebc5bbbba5ea8334eab54911918ee1ad, type: 3}
+  SpacebarTopAudio: {fileID: 8300000, guid: 9eabdbb09e7f5d744a101a45ceeb4314, type: 3}
   secondsUntilInstuctions: 0
---- !u!82 &1276286202
+--- !u!1 &1540377390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1540377392}
+  - component: {fileID: 1540377391}
+  - component: {fileID: 1540377393}
+  m_Layer: 0
+  m_Name: Narrator
+  m_TagString: Narrator
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1540377391
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1276286199}
+  m_GameObject: {fileID: 1540377390}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1446,6 +1464,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!4 &1540377392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540377390}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 904.7213, y: 464.38635, z: -526.92163}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1540377393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540377390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d01f70f0a313544aa83e22e1555b6a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1892077680
 GameObject:
   m_ObjectHideFlags: 0

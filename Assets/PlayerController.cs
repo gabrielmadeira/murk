@@ -22,6 +22,16 @@ public class PlayerController : MonoBehaviour
     private bool lockRotation = true;
 
     // - SOUND -------------- 
+    public GameObject ObjectMusic; // Universal narrator
+    private AudioSource voiceAudioSrc; // Narrator audio source
+
+    public AudioClip introAudio;
+    public AudioClip gameplayInstructionsAudio;
+    public AudioClip youDiedAudio;
+    public AudioClip youLeftAudio;
+
+    private bool playedInstructionAudio = false;
+
     public AudioSource audioSrcSteps;
     public AudioSource audioSrcBreath;
     private float breath;
@@ -56,7 +66,15 @@ public class PlayerController : MonoBehaviour
         ChangeSound();
 
         if (Input.GetKey(KeyCode.Escape))
+        {
+            PlayAudioClip(youLeftAudio);
             EndGame();
+        }
+
+        if (playedInstructionAudio == false && !voiceAudioSrc.isPlaying){
+            PlayAudioClip(gameplayInstructionsAudio);
+            playedInstructionAudio = true;
+        }
     }
 
     void Move()
@@ -127,6 +145,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ObjectMusic = GameObject.FindWithTag("Narrator"); // Gets the universal narrator
+        voiceAudioSrc = ObjectMusic.GetComponent<AudioSource>();
+
         darkCamera.enabled = !OptionsMenu.isDebugMode; // Turns on the black view camera is debug mode is off
         
         Cursor.lockState = CursorLockMode.Locked;
@@ -134,6 +155,8 @@ public class PlayerController : MonoBehaviour
         breath = 1; // Player starts with max breath
 
         clipSampleData = new float[sampleDataLength];
+
+        PlayAudioClip(introAudio); // Passa instruções para o player
     }
 
     // Update is called once per frame
@@ -207,6 +230,7 @@ public class PlayerController : MonoBehaviour
     // On collision with a monster, ends the game
     void OnCollisionEnter(Collision col) {
         if (col.gameObject.tag == "Monster") {
+            PlayAudioClip(youDiedAudio);
             EndGame();
         }
     }
@@ -214,5 +238,11 @@ public class PlayerController : MonoBehaviour
     void EndGame() { // Ends game by going back to menu
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene(0);
+    }
+
+    void PlayAudioClip(AudioClip soundClip)
+    {
+        voiceAudioSrc.clip = soundClip;
+        voiceAudioSrc.Play();
     }
 }

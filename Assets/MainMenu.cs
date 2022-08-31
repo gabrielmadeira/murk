@@ -7,7 +7,9 @@ using UnityEngine.EventSystems;
 
 public class MainMenu : MonoBehaviour
 {
-    public AudioSource voiceAudioSrc;
+    public GameObject ObjectMusic; // Universal narrator
+    private AudioSource voiceAudioSrc; // Narrator audio source
+
     public AudioClip welcomeAudio;
     public AudioClip menuAudio;
     public AudioClip startSelectedAudio;
@@ -24,6 +26,9 @@ public class MainMenu : MonoBehaviour
     public float secondsUntilInstuctions = 0;
 
     void Start() {
+        ObjectMusic = GameObject.FindWithTag("Narrator");
+        voiceAudioSrc = ObjectMusic.GetComponent<AudioSource>();
+
         if (!welcomed)
         {
             PlayAudioClip(welcomeAudio);

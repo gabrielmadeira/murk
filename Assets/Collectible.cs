@@ -33,13 +33,13 @@ public class Collectible : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        scale_x = 10*planePrefab.transform.localScale.x/2-5;
+        scale_x = 10*OptionsMenu.mapSizeX/2-5;
         if (scale_x < 0)
         {
             scale_x = 0;
         }
 
-        scale_z = 10*planePrefab.transform.localScale.z/2-5;
+        scale_z = 10*OptionsMenu.mapSizeZ/2-5;
         if (scale_z < 0)
         {
             scale_z = 0;
@@ -52,7 +52,7 @@ public class Collectible : MonoBehaviour
     void FixedUpdate()
     {
         transform.localRotation = Quaternion.Euler(90f, Time.time * 100f, 0);
-        audioData.volume = (0.4f+0.6f*Mathf.Sin(Time.time/3)); // PROVISÓRIO
+        audioData.volume = (0.6f+0.5f*Mathf.Sin(Time.time/3)); // PROVISÓRIO (varia volume entre 0.1 e 1)
     }
 
     void Update()

@@ -7,6 +7,7 @@ TagManager:
   - SoundArea
   - NoiseArea
   - Monster
+  - Narrator
   layers:
   - Default
   - TransparentFX

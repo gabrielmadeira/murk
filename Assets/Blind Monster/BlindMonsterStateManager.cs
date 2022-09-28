@@ -27,7 +27,7 @@ public class BlindMonsterStateManager : MonoBehaviour
     [HideInInspector]
     public float scale_z;
 
-    public float minVol = 0.15f;
+    public float minVol = 0.65f;
 
     public float patrolSpeed = 3;
     public float huntSpeed = 5;

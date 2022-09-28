@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log("Breath: " + breath + " Breath sound: " + audioSrcBreath.volume);
+        // Debug.Log("Breath: " + breath + " Breath sound: " + audioSrcBreath.volume);
         Move();
         ChangeSound();
 

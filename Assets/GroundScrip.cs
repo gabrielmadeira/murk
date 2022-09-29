@@ -8,6 +8,10 @@ public class GroundScrip : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject blindMonsterPrefab;
     public GameObject goalPrefab;
+    public GameObject envObjectPrefab;
+    public List<AudioClip> envObjectsClips;
+    public GameObject envSoundPrefab;
+    public List<AudioClip> envSoundsClips;
 
     public Camera darkCamera;
 
@@ -18,6 +22,15 @@ public class GroundScrip : MonoBehaviour
 
     private Vector3 playerStartingPosition;
     private Vector3 randomPosition;
+
+    public List<GameObject> envObjectsAndSounds;
+    public List<int> envObjectsAndSoundsDelay;
+
+    private int minEnvObjectAndSoundDelay = 10; // in seconds
+    private int maxEnvObjectAndSoundDelay = 100;
+
+    private float timer;
+    private int lastSecond;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +45,13 @@ public class GroundScrip : MonoBehaviour
         BuildWalls();
         SpawnMonster();
         PlaceGoal();
+
+        int numberObjElements = 5;
+        for(int i=0; i < numberObjElements; i++){
+            PlaceEnvObject();
+        }
+
+        PlaceEnvSounds();
     }
 
     // Update is called once per frame
@@ -42,6 +62,23 @@ public class GroundScrip : MonoBehaviour
             darkCamera.depth = 0;
         else
             darkCamera.depth = 10;
+    }
+
+    void FixedUpdate() 
+    {
+        timer += Time.deltaTime;
+        int second = (int)(timer % 60);
+        if(second>lastSecond) {
+            for(int i=0; i<envObjectsAndSounds.Count; i++) {
+                if(envObjectsAndSoundsDelay[i] <= 0) {
+                    AudioSource source = envObjectsAndSounds[i].GetComponent<AudioSource>();
+                    source.Play();
+                    envObjectsAndSoundsDelay[i] = Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay);
+                }
+                envObjectsAndSoundsDelay[i]--;
+            }
+        }
+        lastSecond = second;
     }
 
     void PlacePlayer()
@@ -99,5 +136,32 @@ public class GroundScrip : MonoBehaviour
 
         GameObject goal = Instantiate(goalPrefab, randomPosition, goalPrefab.transform.localRotation);
         goal.name = "Goal";
+    }
+
+    void PlaceEnvObject() {
+        // Looks for a random place to spawn env object
+        Vector3 envObjectPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
+
+        // Spawns it
+        GameObject envObject = Instantiate(envObjectPrefab, envObjectPosition, Quaternion.Euler(0, Random.Range(0,360), 0));
+        envObject.name = "EnvObject";
+
+        AudioSource source = envObject.GetComponent<AudioSource>();
+        int pickedSound = Random.Range(0, envObjectsClips.Count);
+        source.clip = envObjectsClips[pickedSound];
+        envObjectsAndSounds.Add(envObject);
+        envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay));
+    }
+
+    void PlaceEnvSounds() {
+        Vector3 envSoundPosition = new Vector3(1,1,1);
+
+        for(int i=0; i<envSoundsClips.Count; i++) {
+            GameObject envSound = Instantiate(envSoundPrefab, envSoundPosition, Quaternion.Euler(0, 0, 0));
+            envSound.name = "EnvSound";
+            envSound.GetComponent<AudioSource>().clip = envSoundsClips[i];
+            envObjectsAndSounds.Add(envSound);
+            envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay));
+        }
     }
 }

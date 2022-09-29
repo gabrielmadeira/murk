@@ -115,4 +115,15 @@ MonoBehaviour:
   playerPrefab: {fileID: 5626499424307299194, guid: c3ff72e7c6f3b5149b9ddabe2c118167, type: 3}
   blindMonsterPrefab: {fileID: 5153226794655895856, guid: 153b4c20837c82641a35b15778f672a4, type: 3}
   goalPrefab: {fileID: 6282800942365001137, guid: ab29ef6bfcd138340986282f6a52321a, type: 3}
+  envObjectPrefab: {fileID: 131970922576049192, guid: dfb814609513e414ebfa82ec240d4352, type: 3}
+  envObjectsClips:
+  - {fileID: 8300000, guid: 17910c7a49e731a418f5328460ae673d, type: 3}
+  - {fileID: 8300000, guid: 39686f1326507f8458add07d1241f0a8, type: 3}
+  envSoundPrefab: {fileID: 5479933240406645290, guid: 6304e414c1504664faaad2ec41a66150, type: 3}
+  envSoundsClips:
+  - {fileID: 8300000, guid: 146877c95002b584babfd7c247aae9c5, type: 3}
+  - {fileID: 8300000, guid: a7cdb4ec570595e4f8be54c3bf1a6396, type: 3}
+  darkCamera: {fileID: 0}
   numberOfBlindMonsters: 1
+  envObjectsAndSounds: []
+  envObjectsAndSoundsDelay: 

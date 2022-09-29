@@ -1,0 +1,24 @@
+1-Welcome to Murk
+2-You are in the game menu, use your arrow keys and enter key to select one of the options
+3-Start the game
+4-Change settings
+5-Quit game
+6-You are in the settings men
+7-Quit settings menu
+8-Toggle debug mode on
+9-Toggle debug mode off
+10-Debug mode is now on
+11-Debug mode is now off
+12-Starting game, find the source of the athem, it will be easy... dont worry
+13-You died, ending game
+14-You pressed escape, ending game
+15-Use the left control key to walk slowly,  the spacebar to run and the escape button to pause the game
+16-Use the space bar to listen again where you are at
+17-Type map size, from 1 to 10
+18-Map size changed
+19-The map size you typed is too small, I changed it to the minimum
+20-The map size you typed is too large, I changed it to the maximum
+21-The map size you typed is not an integer, I changed it to 5
+22-The game is paused
+23-The game will now continue
+24-Unpause

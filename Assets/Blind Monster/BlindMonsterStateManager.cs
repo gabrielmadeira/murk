@@ -18,9 +18,6 @@ public class BlindMonsterStateManager : MonoBehaviour
     [HideInInspector]
     public float uncertaintyZoneDiameter;
 
-    // Ground
-    public GameObject planePrefab;
-
     // Ground Measurements
     [HideInInspector]
     public float scale_x;
@@ -81,12 +78,12 @@ public class BlindMonsterStateManager : MonoBehaviour
 
     public void measuresBoard() {
         // Writes down size of the board
-        scale_x = 10*planePrefab.transform.localScale.x/2-2;
+        scale_x = 10*OptionsMenu.mapSizeX/2-2;
         if (scale_x < 0)
         {
             scale_x = 0;
         }
-        scale_z = 10*planePrefab.transform.localScale.z/2-2;
+        scale_z = 10*OptionsMenu.mapSizeZ/2-2;
         if (scale_z < 0)
         {
             scale_z = 0;

@@ -16,6 +16,7 @@ public class GroundScrip : MonoBehaviour
     public Camera darkCamera;
 
     public int numberOfBlindMonsters;
+    private float numberObjElements;
 
     private float scale_x;
     private float scale_z;
@@ -43,11 +44,13 @@ public class GroundScrip : MonoBehaviour
         PlacePlayer();
 
         BuildWalls();
-        SpawnMonster();
+        SpawnMonsters();
         PlaceGoal();
 
-        int numberObjElements = 5;
-        for(int i=0; i < numberObjElements; i++){
+        numberObjElements = (OptionsMenu.mapSizeX*OptionsMenu.mapSizeX)/60; // Marks 1 object element for creation per 60 units
+        numberObjElements = Random.Range(numberObjElements - Mathf.Sqrt(numberObjElements),numberObjElements + Mathf.Sqrt(numberObjElements)); // Adds variation to the number of object elements
+        numberObjElements = Mathf.Min(Mathf.Max(numberObjElements,1),100); // Keeps the number of elements to a minimum of 1 and a maximum of 100
+        for(int i=0; i < (int)numberObjElements; i++){
             PlaceEnvObject();
         }
 
@@ -112,7 +115,7 @@ public class GroundScrip : MonoBehaviour
         wall4.name = "South Wall";
     }
 
-    void SpawnMonster() {
+    void SpawnMonsters() {
         
         int monstersPlaced = 0;
         while (monstersPlaced < numberOfBlindMonsters)

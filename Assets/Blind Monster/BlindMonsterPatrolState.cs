@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BlindMonsterPatrolState : BlindMonsterBaseState
 {
+    private GameObject Player;
+
     private Vector3 walkPoint;
     private bool walkPointSet;
 
@@ -12,6 +14,7 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
 
     public override void EnterState(BlindMonsterStateManager monster) {
         //Debug.Log("Patrol");
+        Player = GameObject.FindWithTag("Player"); // Smells the player ONLY WORKS IN SINGLEPLAYER
 
         monster.pace = monster.patrolSpeed;
         monster.audioSrc.volume = monster.minVol;
@@ -52,7 +55,6 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
             }   
         }
         Move(monster, walkPoint);
-        //Debug.Log("Patrolling" + walkPoint);
     }
 
     public override void OnTriggerEnterState(BlindMonsterStateManager monster, Collider other) {
@@ -78,9 +80,16 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
         walkPoint.x += randomXZ[0];
         walkPoint.z += randomXZ[1];
 
+        // Adds preference to move towards the player relative to how far away it is
+        walkPoint += Vector3.Normalize(SmellPlayer(monster))*(Mathf.Max(0,(Vector3.Magnitude(SmellPlayer(monster))-60))/10);
+
         walkPoint = monster.SetWithingBounds(walkPoint);
 
         walkPointSet = true;  
+    }
+
+    private Vector3 SmellPlayer(BlindMonsterStateManager monster) {
+        return (Player.transform.position - monster.transform.position);
     }
 
 }

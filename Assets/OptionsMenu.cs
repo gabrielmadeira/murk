@@ -129,8 +129,6 @@ public class OptionsMenu : MonoBehaviour
                 PlayAudioClip(debugModeTurnedOffAudio);
             }
         }
-        
-        print(isDebugMode);
     }
 
     public void QuitGame() {

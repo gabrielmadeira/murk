@@ -9,11 +9,6 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public GameObject camHolder;
     public GameObject soundBroadcast;
-    public int coinsCollected = 0;
-
-    // - CAMERA -------------
-    public Camera darkCamera;
-    // ----------------------
 
     public float speed, sprintSpeed, slowSpeed, sensitivity, maxForce;
     private Vector2 move, look;
@@ -36,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioSrcBreath;
     private float breath;
 
+    private float stepingLoudness;
+    private float breathLoudness;
     private float audioReach;
 
     public float updateStep = 0.05f;
@@ -61,15 +58,10 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log("Breath: " + breath + " Breath sound: " + audioSrcBreath.volume);
+        //Debug.Log("Breath: " + breath + " Breath sound: " + audioSrcBreath.volume);
+        //Debug.Log(darkCamera.enabled);
         Move();
         ChangeSound();
-
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            PlayAudioClip(youLeftAudio);
-            EndGame();
-        }
 
         if (playedInstructionAudio == false && !voiceAudioSrc.isPlaying){
             PlayAudioClip(gameplayInstructionsAudio);
@@ -147,8 +139,6 @@ public class PlayerController : MonoBehaviour
     {
         ObjectMusic = GameObject.FindWithTag("Narrator"); // Gets the universal narrator
         voiceAudioSrc = ObjectMusic.GetComponent<AudioSource>();
-
-        darkCamera.enabled = !OptionsMenu.isDebugMode; // Turns on the black view camera is debug mode is off
         
         Cursor.lockState = CursorLockMode.Locked;
         audioSrcSteps.volume = 0f;
@@ -160,9 +150,19 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.E)) // Checks if the player wants to exit the game
+        {
+            PlayAudioClip(youLeftAudio);
+            EndGame();
+        }
+    }
+
     void LateUpdate()
     {
-        Look();
+        if (!PauseMenu.gameIsPaused)
+            Look();
     }
 
     void ChangeSound()
@@ -174,13 +174,19 @@ public class PlayerController : MonoBehaviour
         if (currentUpdateTime >= updateStep) {
             currentUpdateTime = 0f;
 
+            // Calcula a loudness dos passos do player
+            stepingLoudness = ClipLoudnessCalculator(audioSrcSteps);
+            if (float.IsNaN(stepingLoudness))
+                stepingLoudness = 0f;
+            
+            // Calcula a loudness da respiração do player
+            breathLoudness = ClipLoudnessCalculator(audioSrcBreath);
+            if (float.IsNaN(breathLoudness))
+                breathLoudness = 0f;
+
             //Calcula a distancia até onde será ouvido o som do player.
-            audioReach = Mathf.Sqrt(500000*(ClipLoudnessCalculator(audioSrcSteps)+ClipLoudnessCalculator(audioSrcBreath))+1f);
-            if (float.IsNaN(audioReach))
-            {
-                audioReach = 1f;
-            }
-            //Debug.Log(audioReach);
+            audioReach = Mathf.Sqrt(500000*(stepingLoudness+breathLoudness)+1f);
+
             soundBroadcast.transform.localScale = new Vector3(audioReach, 0.1f, audioReach);   
         }
     }
@@ -236,8 +242,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void EndGame() { // Ends game by going back to menu
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.LoadScene(0);
+        Cursor.lockState = CursorLockMode.Confined;
+        SceneManager.LoadScene(3);
     }
 
     void PlayAudioClip(AudioClip soundClip)

@@ -64,8 +64,8 @@ public class Collectible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerController>().coinsCollected++;
-            Debug.Log(other.gameObject.GetComponent<PlayerController>().coinsCollected);
+            //other.gameObject.GetComponent<PlayerController>().goalsCollectedByPlayer++; // Increments this player's ammount of goals collected
+            MainMenu.goalsCollected++; // Increments the global ammount of coins collected
             OnCollected?.Invoke();
             ChangePostion();
         }

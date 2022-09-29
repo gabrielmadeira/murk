@@ -25,6 +25,10 @@ public class MainMenu : MonoBehaviour
 
     public float secondsUntilInstuctions = 0;
 
+    // SCORES
+    public static int goalsCollected;
+    public static float startOfTheGame;
+
     void Start() {
         ObjectMusic = GameObject.FindWithTag("Narrator");
         voiceAudioSrc = ObjectMusic.GetComponent<AudioSource>();
@@ -76,6 +80,8 @@ public class MainMenu : MonoBehaviour
      }
 
     public void PlayGame() {
+        goalsCollected = 0;
+        startOfTheGame = Time.time;
         SceneManager.LoadScene(1);
     }
     

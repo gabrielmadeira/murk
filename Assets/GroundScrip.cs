@@ -9,6 +9,8 @@ public class GroundScrip : MonoBehaviour
     public GameObject blindMonsterPrefab;
     public GameObject goalPrefab;
 
+    public Camera darkCamera;
+
     public int numberOfBlindMonsters;
 
     private float scale_x;
@@ -35,7 +37,11 @@ public class GroundScrip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Places dark camera above or below the others
+        if (OptionsMenu.isDebugMode)
+            darkCamera.depth = 0;
+        else
+            darkCamera.depth = 10;
     }
 
     void PlacePlayer()

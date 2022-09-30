@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GroundScrip : MonoBehaviour
 {
+    // All prefabs for instantiation at the start of the game
     public GameObject wallPrefab;
     public GameObject playerPrefab;
     public GameObject blindMonsterPrefab;
@@ -12,11 +13,14 @@ public class GroundScrip : MonoBehaviour
     public List<AudioClip> envObjectsClips;
     public GameObject envSoundPrefab;
     public List<AudioClip> envSoundsClips;
+    public GameObject cricketPrefab;
+    public List<AudioClip> cricketClips;
 
     public Camera darkCamera;
 
     public int numberOfBlindMonsters;
     private float numberObjElements;
+    private float numberCrickets;
 
     private float scale_x;
     private float scale_z;
@@ -47,14 +51,11 @@ public class GroundScrip : MonoBehaviour
         SpawnMonsters();
         PlaceGoal();
 
-        numberObjElements = (OptionsMenu.mapSizeX*OptionsMenu.mapSizeX)/60; // Marks 1 object element for creation per 70 units
-        numberObjElements = Random.Range(numberObjElements - Mathf.Sqrt(numberObjElements),numberObjElements + Mathf.Sqrt(numberObjElements)); // Adds variation to the number of object elements
-        numberObjElements = Mathf.Min(Mathf.Max(numberObjElements,1),100); // Keeps the number of elements to a minimum of 1 and a maximum of 100
-        for(int i=0; i < (int)numberObjElements; i++){
-            PlaceEnvObject();
-        }
+        PlaceEnvObjects();
 
         PlaceEnvSounds();
+
+        PlaceCrickets();
     }
 
     // Update is called once per frame
@@ -153,30 +154,62 @@ public class GroundScrip : MonoBehaviour
         goal.name = "Goal";
     }
 
-    void PlaceEnvObject() {
-        // Looks for a random place to spawn env object
-        Vector3 envObjectPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
+    void PlaceEnvObjects() {
+        numberObjElements = getAmmountFromDensity(60); // Marks 1 object element for creation per 60 square units of area
 
-        // Spawns it
-        GameObject envObject = Instantiate(envObjectPrefab, envObjectPosition, Quaternion.Euler(0, Random.Range(0,360), 0));
-        envObject.name = "EnvObject";
+        for(int i=0; i < (int)numberObjElements; i++){
+            // Looks for a random place to spawn env object
+            Vector3 envObjectPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
 
-        AudioSource source = envObject.GetComponent<AudioSource>();
-        int pickedSound = Random.Range(0, envObjectsClips.Count);
-        source.clip = envObjectsClips[pickedSound];
-        envObjectsAndSounds.Add(envObject);
-        envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay));
+            // Spawns it
+            GameObject envObject = Instantiate(envObjectPrefab, envObjectPosition, Quaternion.Euler(0, Random.Range(0,360), 0));
+            envObject.name = "EnvObject " + (i+1);
+
+            AudioSource source = envObject.GetComponent<AudioSource>();
+            int pickedSound = Random.Range(0, envObjectsClips.Count);
+            source.clip = envObjectsClips[pickedSound];
+
+            envObjectsAndSounds.Add(envObject);
+            envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay)+10);
+        }
     }
 
     void PlaceEnvSounds() {
-        Vector3 envSoundPosition = new Vector3(1,1,1);
+        Vector3 envSoundPosition = new Vector3(1,3,1);
 
         for(int i=0; i<envSoundsClips.Count; i++) {
             GameObject envSound = Instantiate(envSoundPrefab, envSoundPosition, Quaternion.Euler(0, 0, 0));
-            envSound.name = "EnvSound";
+            envSound.name = "EnvSound " + (i+1);
             envSound.GetComponent<AudioSource>().clip = envSoundsClips[i];
+
             envObjectsAndSounds.Add(envSound);
-            envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay));
+            envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay)+10);
         }
+    }
+
+    void PlaceCrickets() {
+        
+        numberCrickets = getAmmountFromDensity(60); // Marks 1 object element for creation per 100 square units of area
+
+        for(int i=0; i<numberCrickets; i++)
+        {
+            // Looks for a random place to spawn cricket object
+            Vector3 envObjectPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),cricketPrefab.transform.position.y,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
+
+            // Spawns it
+            GameObject cricket = Instantiate(cricketPrefab, envObjectPosition, Quaternion.Euler(0, Random.Range(0,360), 0));
+            cricket.name = "Cricket " + (i+1);
+
+            AudioSource source = cricket.GetComponent<AudioSource>();
+            source.clip = cricketClips[Random.Range(0, cricketClips.Count)];
+
+            source.Play();
+        }
+    }
+
+    private float getAmmountFromDensity(float density) {
+        float ammount = (OptionsMenu.mapSizeX*OptionsMenu.mapSizeX)/density; // Marks 1 object element for creation per 70 units
+        ammount = Random.Range(ammount - Mathf.Sqrt(ammount),ammount + Mathf.Sqrt(ammount)); // Adds variation to the number of object elements
+        return Mathf.Min(Mathf.Max(ammount,1),100); // Keeps the number of elements to a minimum of 1 and a maximum of 100
     }
 }

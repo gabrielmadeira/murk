@@ -208,9 +208,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9464d31741820be4d84bf05ab4d7e4e4, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 45501733aeeabf1419dcabd833bb9295, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -219,7 +219,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 1200
+  MaxDistance: 1000
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -308,6 +308,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planePrefab: {fileID: 4056992237812563194, guid: 56dba28ae9fcb234793a5ee56c3f888c, type: 3}
   audioData: {fileID: 6282800942365001143}
+  songs:
+  - {fileID: 8300000, guid: ec4ff059732068144b6c70aa698ade33, type: 3}
+  - {fileID: 8300000, guid: 9eecfad5f7f86f84f81ef3fd4c0a7d4b, type: 3}
+  - {fileID: 8300000, guid: 45501733aeeabf1419dcabd833bb9295, type: 3}
+  - {fileID: 8300000, guid: 855fe6cb09c78704c95cff84b4fc7c70, type: 3}
+  - {fileID: 8300000, guid: 71be61a3514716d41bca7719ab7db1f0, type: 3}
+  - {fileID: 8300000, guid: 79afea55575abfa40a79fe6665c2f453, type: 3}
   noiseBroadcast: {fileID: 6282800942029259137}
   updateStep: 0.04
   sampleDataLength: 1024

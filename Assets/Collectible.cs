@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Collectible : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class Collectible : MonoBehaviour
 
     // Audio source (Hino)
     public AudioSource audioData;
+    public List<AudioClip> songs;
+    private int amountOfSongs;
+
     public GameObject noiseBroadcast;
 
     public float updateStep = 0.05f;
@@ -33,6 +37,10 @@ public class Collectible : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioData.clip = songs[MainMenu.goalsCollected]; // Sets the sound to the 
+        audioData.Play();
+        amountOfSongs = songs.Count;
+
         scale_x = 10*OptionsMenu.mapSizeX/2-5;
         if (scale_x < 0)
         {
@@ -52,7 +60,6 @@ public class Collectible : MonoBehaviour
     void FixedUpdate()
     {
         transform.localRotation = Quaternion.Euler(90f, Time.time * 100f, 0);
-        // audioData.volume = (0.6f+0.5f*Mathf.Sin(Time.time/3)); // PROVISÓRIO (varia volume entre 0.1 e 1)
     }
 
     void Update()
@@ -64,10 +71,17 @@ public class Collectible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //other.gameObject.GetComponent<PlayerController>().goalsCollectedByPlayer++; // Increments this player's ammount of goals collected
-            MainMenu.goalsCollected++; // Increments the global ammount of coins collected
+            //other.gameObject.GetComponent<PlayerController>().goalsCollectedByPlayer++; // Increments this player's amount of goals collected
+            MainMenu.goalsCollected++; // Increments the global amount of coins collected
             OnCollected?.Invoke();
-            ChangePostion();
+
+            if (MainMenu.goalsCollected < amountOfSongs)
+                ChangePostion();
+            else
+            {
+                Cursor.lockState = CursorLockMode.Confined; // Ends game if all goals were collected
+                SceneManager.LoadScene(3);
+            }
         }
     }
 
@@ -110,6 +124,7 @@ public class Collectible : MonoBehaviour
     void StartAudio()
     {
         audioData = GetComponent<AudioSource>();
+        audioData.clip = songs[MainMenu.goalsCollected]; // Sets the song to that of the current level
         audioData.Play(0);
     }
 }

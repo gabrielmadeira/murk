@@ -46,8 +46,8 @@ public class BlindMonsterStateManager : MonoBehaviour
 
     void Start()
     {
-        // Gets audio source
-        //audioSrc = GetComponent<AudioSource>();
+        // Takes the monster to a random place in his walk so it doesnt sync up with other monsters
+        stepsAudioSrc.time = Random.Range(0f,stepsAudioSrc.clip.length);
 
         // Writes down size of the board
         measuresBoard();

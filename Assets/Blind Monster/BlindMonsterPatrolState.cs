@@ -88,7 +88,7 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
         walkPoint.z += randomXZ[1];
         
         // Adds preference to move towards the goal relative to how far away it is (its hunting strategy)
-        walkPoint += Vector3.Normalize(HearGoal(monster))*(Mathf.Max(0,(Vector3.Magnitude(HearGoal(monster))-50))/10);
+        walkPoint += Vector3.Normalize(HearGoal(monster))*(Mathf.Max(0,(Vector3.Magnitude(HearGoal(monster))-30))/3);
         walkPoint = monster.SetWithingBounds(walkPoint);
 
         walkPointSet = true;  

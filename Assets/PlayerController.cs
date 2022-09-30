@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Debug.Log("Breath: " + breath + " Breath sound: " + audioSrcBreath.volume);
+        Debug.Log("Breath: " + breath + " Breath sound: " + audioSrcBreath.volume);
         //Debug.Log(darkCamera.enabled);
         Move();
         ChangeSound();
@@ -230,7 +230,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void ChangeSoundBreath() {
-        audioSrcBreath.volume = 1-Mathf.Pow(breath,3);
+        audioSrcBreath.volume = (1-Mathf.Pow(breath,3)); // The more out of breath you are, the louder you breath
+        audioSrcBreath.volume *= (0.25f + 0.75f*Vector3.Magnitude(rb.velocity/sprintSpeed)); // The faster you are going, the louder you breath
     }
 
     // On collision with a monster, ends the game

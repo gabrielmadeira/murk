@@ -47,7 +47,7 @@ public class GroundScrip : MonoBehaviour
         SpawnMonsters();
         PlaceGoal();
 
-        numberObjElements = (OptionsMenu.mapSizeX*OptionsMenu.mapSizeX)/60; // Marks 1 object element for creation per 60 units
+        numberObjElements = (OptionsMenu.mapSizeX*OptionsMenu.mapSizeX)/60; // Marks 1 object element for creation per 70 units
         numberObjElements = Random.Range(numberObjElements - Mathf.Sqrt(numberObjElements),numberObjElements + Mathf.Sqrt(numberObjElements)); // Adds variation to the number of object elements
         numberObjElements = Mathf.Min(Mathf.Max(numberObjElements,1),100); // Keeps the number of elements to a minimum of 1 and a maximum of 100
         for(int i=0; i < (int)numberObjElements; i++){
@@ -75,7 +75,19 @@ public class GroundScrip : MonoBehaviour
             for(int i=0; i<envObjectsAndSounds.Count; i++) {
                 if(envObjectsAndSoundsDelay[i] <= 0) {
                     AudioSource source = envObjectsAndSounds[i].GetComponent<AudioSource>();
-                    source.Play();
+                    if (i+1 < numberObjElements) // Toca sons de objetos normalmente
+                    {
+                        //Debug.Log("playing object " + i + " sound with: " + source.volume + " volume");
+                        source.Play();
+                    }
+                    else // Toca sons de ambiente
+                    {
+                        float original_vol = source.volume;
+                        source.volume = Random.Range(0.1f,1f); // Varia o volume dos sons de ambiente
+                        //Debug.Log("playing enviroment " + i + " sound with: " + source.volume + " volume");
+                        source.Play();
+                        source.volume = original_vol;
+                    }
                     envObjectsAndSoundsDelay[i] = Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay);
                 }
                 envObjectsAndSoundsDelay[i]--;

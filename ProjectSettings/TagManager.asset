@@ -8,6 +8,7 @@ TagManager:
   - NoiseArea
   - Monster
   - Narrator
+  - Goal
   layers:
   - Default
   - TransparentFX

@@ -10,6 +10,9 @@ public class BlindMonsterHuntState : BlindMonsterBaseState
 
         monster.certainty = Mathf.Max(0.05f,monster.certainty);
 
+        // Sets growling volume to the maximum
+        monster.growlAudioSrc.volume = 1;
+
         // Gets the distance from player being chased
         distanceFromPlayer = Vector3.Distance(monster.transform.position, monster.playerLastHeardAt);
 
@@ -31,10 +34,12 @@ public class BlindMonsterHuntState : BlindMonsterBaseState
         // Makes the monster more certain of the players position (takes about 5s to reach maximum certainty)
         monster.certainty += Time.deltaTime/5;
         if (monster.certainty > 1)
+        {
             monster.certainty = 1;
+        }
+        monster.PlayGrowl();
         
         monster.pace = monster.patrolSpeed + (monster.huntSpeed-monster.patrolSpeed)*monster.certainty; // Adjusts the monster's speed based on his certainty
-        monster.audioSrc.volume = monster.minVol + (1-monster.minVol)*monster.certainty; // Adjusts the monster's volume based on his certainty
 
         Move(monster, monster.playerLastHeardAt);
 

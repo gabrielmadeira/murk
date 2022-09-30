@@ -23,14 +23,17 @@ public class BlindMonsterCluelessState : BlindMonsterBaseState
         }
 
         monster.pace = monster.patrolSpeed + (monster.huntSpeed-monster.patrolSpeed)*monster.certainty; // Adjusts the monster's speed based on his certainty
-        monster.audioSrc.volume = monster.minVol + (1-monster.minVol)*monster.certainty; // Adjusts the monster's volume based on his certainty
 
         // Increases the uncertaintyZone cause it has less idea of where the player is
         monster.uncertaintyZoneDiameter += 1.5f*Time.deltaTime;
         monster.uncertaintyZone.transform.localScale = new Vector3(monster.uncertaintyZoneDiameter, 0.1f, monster.uncertaintyZoneDiameter);
 
         if (!walkPointSet)
+        {
             SearchWalkPoint(monster); // Finds a new walkpoint
+            monster.growlAudioSrc.volume = 0.3f+0.7f*monster.certainty; // Adjusts monster growling volume as it loses interest
+            monster.PlayGrowl();
+        }
         else {
             Vector3 distanceToWalkPoint = monster.transform.position-walkPoint;
 

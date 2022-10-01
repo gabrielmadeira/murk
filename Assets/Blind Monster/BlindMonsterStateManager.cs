@@ -5,7 +5,14 @@ using UnityEngine;
 public class BlindMonsterStateManager : MonoBehaviour
 {
     public Rigidbody rb;
-    public AudioSource audioSrc;
+    
+    // Audio Sources
+    public AudioSource stepsAudioSrc;
+    public AudioSource growlAudioSrc;
+    public List<AudioClip> growls;
+
+    private int chosenGrowl;
+    private int lastChosenGrowl = 0;
 
     // Uncertainty zone
     public GameObject uncertaintyZonePrefab;
@@ -24,7 +31,7 @@ public class BlindMonsterStateManager : MonoBehaviour
     [HideInInspector]
     public float scale_z;
 
-    public float minVol = 0.65f;
+    public float minStepVol;
 
     public float patrolSpeed = 3;
     public float huntSpeed = 5;
@@ -39,8 +46,8 @@ public class BlindMonsterStateManager : MonoBehaviour
 
     void Start()
     {
-        // Gets audio source
-        audioSrc = GetComponent<AudioSource>();
+        // Takes the monster to a random place in his walk so it doesnt sync up with other monsters
+        stepsAudioSrc.time = Random.Range(0f,stepsAudioSrc.clip.length);
 
         // Writes down size of the board
         measuresBoard();
@@ -53,6 +60,15 @@ public class BlindMonsterStateManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Updates the monster's stepping audio  
+        float currentMonsterVel = Vector3.Magnitude(rb.velocity);
+        stepsAudioSrc.volume = currentMonsterVel/huntSpeed; // Changes the monster's step volume based on his speed
+        if (currentMonsterVel>patrolSpeed)
+            stepsAudioSrc.pitch = currentMonsterVel/patrolSpeed; // Changes the monsters pitch (velocity of his steps) if he is trying to go slightly faster
+        else
+            stepsAudioSrc.pitch = 1;
+        //Debug.Log("Vol: " + stepsAudioSrc.volume + " Pitch: " + stepsAudioSrc.pitch);
+
         currentState.FixedUpdateState(this);
     }
 
@@ -107,5 +123,19 @@ public class BlindMonsterStateManager : MonoBehaviour
         }
 
         return walkPoint;
+    }
+
+    public void PlayGrowl() {
+        // Plays and aggresive growl  
+        if (!growlAudioSrc.isPlaying) // If no audio clip is being played
+        {
+            do { // Selects a new growl audio clip
+                chosenGrowl = Random.Range(1,growls.Count);
+            } while (lastChosenGrowl == chosenGrowl);
+            lastChosenGrowl = chosenGrowl;
+
+            growlAudioSrc.clip = growls[chosenGrowl]; 
+            growlAudioSrc.Play(); // Plays it
+        }
     }
 }

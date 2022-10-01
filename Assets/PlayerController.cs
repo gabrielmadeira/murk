@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     // - SOUND -------------- 
     public GameObject ObjectMusic; // Universal narrator
     private AudioSource voiceAudioSrc; // Narrator audio source
+    private float maximumLoudness = 0.5f;
+    private float pitchMultiplier = 0.8f;
 
     public AudioClip introAudio;
     public AudioClip gameplayInstructionsAudio;
@@ -81,7 +83,7 @@ public class PlayerController : MonoBehaviour
         if (isSprinting)
         {
             targetVelocity *= sprintSpeed;
-            breath *= 1-0.01f*Time.deltaTime;
+            breath *= 1-0.008f*Time.deltaTime;
         }
         else if (isSlower)
         {
@@ -152,11 +154,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.E)) // Checks if the player wants to exit the game
-        {
-            PlayAudioClip(youLeftAudio);
-            EndGame();
-        }
     }
 
     void LateUpdate()
@@ -185,7 +182,7 @@ public class PlayerController : MonoBehaviour
                 breathLoudness = 0f;
 
             //Calcula a distancia até onde será ouvido o som do player.
-            audioReach = Mathf.Sqrt(500000*(stepingLoudness+breathLoudness)+1f);
+            audioReach = Mathf.Sqrt(500000*(stepingLoudness+breathLoudness)/maximumLoudness+1f);
 
             soundBroadcast.transform.localScale = new Vector3(audioReach, 0.1f, audioReach);   
         }
@@ -208,7 +205,7 @@ public class PlayerController : MonoBehaviour
                 audioSrcSteps.Play();
 
             // Changes the audio according to his speed
-            audioSrcSteps.volume = Mathf.Pow((rb.velocity.magnitude-0.1f)/(sprintSpeed-0.1f), 1.46f);
+            audioSrcSteps.volume = Mathf.Pow((rb.velocity.magnitude-0.1f)/(sprintSpeed-0.1f), 1.46f)*maximumLoudness;
             
             audioSrcSteps.pitch = rb.velocity.magnitude/3; // Adjusts pitch (audio playing speed) according to the velocity of the player
             if (audioSrcSteps.pitch > 1.8) // Limits maximum pitch
@@ -219,6 +216,7 @@ public class PlayerController : MonoBehaviour
             {
                 audioSrcSteps.pitch = 0.5f;
             }
+            audioSrcSteps.pitch *= pitchMultiplier; 
         }
         else if (audioSrcSteps.volume > 0.00001f) { // Slowly fades away the walking sound
             audioSrcSteps.volume *= 0.85f;
@@ -230,7 +228,9 @@ public class PlayerController : MonoBehaviour
     }
 
     void ChangeSoundBreath() {
-        audioSrcBreath.volume = 1-Mathf.Pow(breath,3);
+        audioSrcBreath.volume = (1-Mathf.Pow(breath,3)); // The more out of breath you are, the louder you breath
+        audioSrcBreath.volume *= (0.25f + 0.75f*Vector3.Magnitude(rb.velocity/sprintSpeed)); // The faster you are going, the louder you breath
+        //audioSrcBreath.volume *= maximumLoudness; // Restricts player sound to the maximum (from 0 to 1)
     }
 
     // On collision with a monster, ends the game

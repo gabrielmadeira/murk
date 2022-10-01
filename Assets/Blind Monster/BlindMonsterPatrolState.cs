@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BlindMonsterPatrolState : BlindMonsterBaseState
 {
-    private GameObject Player;
+    private GameObject Goal;
 
     private Vector3 walkPoint;
     private bool walkPointSet;
@@ -14,15 +14,22 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
 
     public override void EnterState(BlindMonsterStateManager monster) {
         //Debug.Log("Patrol");
-        Player = GameObject.FindWithTag("Player"); // Smells the player ONLY WORKS IN SINGLEPLAYER
+        Goal = GameObject.FindWithTag("Goal"); // Follows the goal sound
 
         monster.pace = monster.patrolSpeed;
-        monster.audioSrc.volume = monster.minVol;
         
         walkPointSet = false;
     }
 
     public override void FixedUpdateState(BlindMonsterStateManager monster) {
+
+        if (!monster.growlAudioSrc.isPlaying) // Just spams the monster's growl if nothing else is being played
+        {
+            monster.growlAudioSrc.clip = monster.growls[0]; // Sets the monster's growl back to its default
+            monster.growlAudioSrc.volume = 0.3f;
+            monster.growlAudioSrc.Play();
+        }
+
         if (!walkPointSet)
         {
             SearchWalkPoint(monster); // Finds a new walkpoint
@@ -79,17 +86,16 @@ public class BlindMonsterPatrolState : BlindMonsterBaseState
         Vector2 randomXZ = Random.insideUnitCircle * 45;
         walkPoint.x += randomXZ[0];
         walkPoint.z += randomXZ[1];
-
-        // Adds preference to move towards the player relative to how far away it is
-        walkPoint += Vector3.Normalize(SmellPlayer(monster))*(Mathf.Max(0,(Vector3.Magnitude(SmellPlayer(monster))-60))/10);
-
+        
+        // Adds preference to move towards the goal relative to how far away it is (its hunting strategy)
+        walkPoint += Vector3.Normalize(HearGoal(monster))*(Mathf.Max(0,(Vector3.Magnitude(HearGoal(monster))-30))/3);
         walkPoint = monster.SetWithingBounds(walkPoint);
 
         walkPointSet = true;  
     }
 
-    private Vector3 SmellPlayer(BlindMonsterStateManager monster) {
-        return (Player.transform.position - monster.transform.position);
+    private Vector3 HearGoal(BlindMonsterStateManager monster) {
+        return (Goal.transform.position - monster.transform.position);
     }
 
 }

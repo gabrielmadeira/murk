@@ -75,21 +75,26 @@ public class GroundScrip : MonoBehaviour
         if(second>lastSecond) {
             for(int i=0; i<envObjectsAndSounds.Count; i++) {
                 if(envObjectsAndSoundsDelay[i] <= 0) {
+
                     AudioSource source = envObjectsAndSounds[i].GetComponent<AudioSource>();
-                    if (i+1 < numberObjElements) // Toca sons de objetos normalmente
-                    {
-                        //Debug.Log("playing object " + i + " sound with: " + source.volume + " volume");
-                        source.Play();
+                    if (!source.isPlaying){ // Will only play sound if nothing is being played currently
+                        envObjectsAndSoundsDelay[i] = Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay); //Sets the next delay
+                        if (i+1 < numberObjElements) // Plays object sound
+                        {
+                            //Debug.Log("playing object " + i + " sound with: " + source.volume + " volume");
+                            source.Play();
+                        }
+                        else // Plays ambient sound
+                        {
+                            float original_vol = source.volume;
+                            source.volume = Random.Range(0.1f,1f); // Varia o volume dos sons de ambiente
+                            //Debug.Log("playing enviroment " + i + " sound with: " + source.volume + " volume");
+                            source.Play();
+                            source.volume = original_vol;
+
+                            envObjectsAndSoundsDelay[i] *= envSoundsClips.Count/2; //Makes the next sound take more time to come if there are many enviroment sounds already
+                        }
                     }
-                    else // Toca sons de ambiente
-                    {
-                        float original_vol = source.volume;
-                        source.volume = Random.Range(0.1f,1f); // Varia o volume dos sons de ambiente
-                        //Debug.Log("playing enviroment " + i + " sound with: " + source.volume + " volume");
-                        source.Play();
-                        source.volume = original_vol;
-                    }
-                    envObjectsAndSoundsDelay[i] = Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay);
                 }
                 envObjectsAndSoundsDelay[i]--;
             }
@@ -133,7 +138,7 @@ public class GroundScrip : MonoBehaviour
         int monstersPlaced = 0;
         while (monstersPlaced < numberOfBlindMonsters)
         {
-            do { // Looks for a place to spawn the monster far from the player
+            do {  //Looks for a place to spawn the monster far from the player
                 randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x+5,scale_x-5+1),1,UnityEngine.Random.Range(-scale_z+5,scale_z-5+1));
             } while (Vector3.Distance(randomPosition, playerStartingPosition) < (scale_x+scale_z)/2);
 
@@ -170,7 +175,7 @@ public class GroundScrip : MonoBehaviour
             source.clip = envObjectsClips[pickedSound];
 
             envObjectsAndSounds.Add(envObject);
-            envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay)+10);
+            envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay));
         }
     }
 
@@ -183,7 +188,7 @@ public class GroundScrip : MonoBehaviour
             envSound.GetComponent<AudioSource>().clip = envSoundsClips[i];
 
             envObjectsAndSounds.Add(envSound);
-            envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay)+10);
+            envObjectsAndSoundsDelay.Add(2*Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay)*envSoundsClips.Count);
         }
     }
 

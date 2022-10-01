@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
         if (isSprinting)
         {
             targetVelocity *= sprintSpeed;
-            breath *= 1-0.01f*Time.deltaTime;
+            breath *= 1-0.008f*Time.deltaTime;
         }
         else if (isSlower)
         {
@@ -154,11 +154,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.E)) // Checks if the player wants to exit the game
-        {
-            PlayAudioClip(youLeftAudio);
-            EndGame();
-        }
     }
 
     void LateUpdate()

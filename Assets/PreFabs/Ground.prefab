@@ -122,11 +122,16 @@ MonoBehaviour:
   envSoundPrefab: {fileID: 5479933240406645290, guid: 6304e414c1504664faaad2ec41a66150, type: 3}
   envSoundsClips:
   - {fileID: 8300000, guid: 146877c95002b584babfd7c247aae9c5, type: 3}
+  - {fileID: 8300000, guid: 146877c95002b584babfd7c247aae9c5, type: 3}
+  - {fileID: 8300000, guid: 146877c95002b584babfd7c247aae9c5, type: 3}
   - {fileID: 8300000, guid: a7cdb4ec570595e4f8be54c3bf1a6396, type: 3}
+  - {fileID: 8300000, guid: e384666db90670a46ac50abcdc749ffc, type: 3}
+  - {fileID: 8300000, guid: a0f205cb96d786a43939ff9bc16a10e3, type: 3}
   cricketPrefab: {fileID: 7690683271431422244, guid: 917f64379c19e5346ad4d1c78ab2dbeb, type: 3}
   cricketClips:
   - {fileID: 8300000, guid: fb860f47d65612c43a2565b3a2372291, type: 3}
   - {fileID: 8300000, guid: 32cc2768bd7585142911012803eabbf9, type: 3}
+  - {fileID: 8300000, guid: 10ddfdbdad239a3478cd9e76c17438de, type: 3}
   darkCamera: {fileID: 0}
   numberOfBlindMonsters: 1
   envObjectsAndSounds: []

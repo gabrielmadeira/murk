@@ -17,10 +17,14 @@ public class Collectible : MonoBehaviour
 
     private Vector3 randomPosition;
 
-    // Audio source (Hino)
+    // Song audio source
     public AudioSource audioData;
     public List<AudioClip> songs;
     private int amountOfSongs;
+
+    // Switching audio source off
+    public AudioSource switchAudioSource;
+    public List<AudioClip> switches;
 
     public GameObject noiseBroadcast;
 
@@ -37,7 +41,7 @@ public class Collectible : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        audioData.clip = songs[MainMenu.goalsCollected]; // Sets the sound to the 
+        audioData.clip = songs[MainMenu.goalsCollected]; // Sets the sound to the
         audioData.Play();
         amountOfSongs = songs.Count;
 
@@ -87,6 +91,9 @@ public class Collectible : MonoBehaviour
 
     void ChangePostion()
     {
+        switchAudioSource.clip = switches[UnityEngine.Random.Range(0,switches.Count)]; // Plays a radio swtich off sound
+        switchAudioSource.Play();
+
         do
         {
             randomPosition = new Vector3(UnityEngine.Random.Range(-scale_x,scale_x+1),2,UnityEngine.Random.Range(-scale_z,scale_z+1));
@@ -122,9 +129,8 @@ public class Collectible : MonoBehaviour
     }
 
     void StartAudio()
-    {
-        audioData = GetComponent<AudioSource>();
+    { 
         audioData.clip = songs[MainMenu.goalsCollected]; // Sets the song to that of the current level
-        audioData.Play(0);
+        audioData.PlayDelayed(switchAudioSource.clip.length+UnityEngine.Random.Range(0,2)); // Makes it start with a little delay 
     }
 }

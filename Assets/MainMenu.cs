@@ -15,7 +15,6 @@ public class MainMenu : MonoBehaviour
     public AudioClip startSelectedAudio;
     public AudioClip settingsSelectedAudio;
     public AudioClip quitSelectedAudio;
-    public AudioClip SpacebarTopAudio; //We are missing this one
 
     GameObject currentSelected;
     GameObject previouslySelected;
@@ -27,6 +26,7 @@ public class MainMenu : MonoBehaviour
 
     // SCORES
     public static int goalsCollected;
+    public static bool gameWon;
     public static float startOfTheGame;
 
     void Start() {
@@ -82,6 +82,7 @@ public class MainMenu : MonoBehaviour
     public void PlayGame() {
         goalsCollected = 0;
         startOfTheGame = Time.time;
+        gameWon = false;
         SceneManager.LoadScene(1);
     }
     

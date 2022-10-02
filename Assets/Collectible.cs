@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class Collectible : MonoBehaviour
 {
-    public static event Action OnCollected;
-
     // Ground
     public GameObject planePrefab;
 
@@ -77,13 +75,13 @@ public class Collectible : MonoBehaviour
         {
             //other.gameObject.GetComponent<PlayerController>().goalsCollectedByPlayer++; // Increments this player's amount of goals collected
             MainMenu.goalsCollected++; // Increments the global amount of coins collected
-            OnCollected?.Invoke();
 
             if (MainMenu.goalsCollected < amountOfSongs)
                 ChangePostion();
             else
             {
                 Cursor.lockState = CursorLockMode.Confined; // Ends game if all goals were collected
+                MainMenu.gameWon = true;
                 SceneManager.LoadScene(3);
             }
         }

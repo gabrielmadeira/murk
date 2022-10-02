@@ -9,6 +9,8 @@ public class GroundScrip : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject blindMonsterPrefab;
     public GameObject goalPrefab;
+
+    // Sound prefabs
     public GameObject envObjectPrefab;
     public List<AudioClip> envObjectsClips;
     public GameObject envSoundPrefab;

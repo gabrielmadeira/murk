@@ -6,6 +6,15 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    public GameObject Narrator; // Universal narrator
+    private AudioSource voiceAudioSrc; // Narrator audio source
+
+    public AudioClip pauseAudio;
+    public AudioClip resumeAudio;
+    public AudioClip youExitedAudio;
+    public AudioClip debugModeTurnedOnAudio;
+    public AudioClip debugModeTurnedOffAudio;
+
     public static bool gameIsPaused = false;
 
     public GameObject pauseMenuUI;
@@ -14,12 +23,18 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
+        Narrator = GameObject.FindWithTag("Narrator");
+        voiceAudioSrc = Narrator.GetComponent<AudioSource>();
+
         DebugToggler.isOn = OptionsMenu.isDebugMode;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(MainMenu.uninterruptable && !voiceAudioSrc.isPlaying) // Turns off uninterruptable bool if the audio turned off
+            MainMenu.uninterruptable = false;
+
         if (Input.GetKeyDown(KeyCode.E)) {
             if (gameIsPaused)
             {
@@ -44,6 +59,7 @@ public class PauseMenu : MonoBehaviour
                 a.UnPause();
         }
 
+        PlayAudioClip(resumeAudio);
         gameIsPaused = false;
     }
 
@@ -60,11 +76,21 @@ public class PauseMenu : MonoBehaviour
                 a.Pause();
         }
 
+        PlayAudioClip(pauseAudio);
         gameIsPaused = true;
     }
 
     public void DebugMode(bool tog) {
         OptionsMenu.isDebugMode = DebugToggler.isOn;
+        if (!MainMenu.uninterruptable)
+        {
+            if (OptionsMenu.isDebugMode) {
+                PlayAudioClip(debugModeTurnedOnAudio);
+            }
+            else {
+                PlayAudioClip(debugModeTurnedOffAudio);
+            }
+        }
     }
 
     public void LoadMenu()
@@ -74,6 +100,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         gameIsPaused = false;
 
+        DoNotDestroy.clipsToPlay.Add(youExitedAudio);
         SceneManager.LoadScene(3);
     }
 
@@ -81,5 +108,11 @@ public class PauseMenu : MonoBehaviour
     {
         Debug.Log("Quitting game...");
         Application.Quit();
+    }
+
+    void PlayAudioClip(AudioClip soundClip)
+    {
+        voiceAudioSrc.clip = soundClip;
+        voiceAudioSrc.Play();
     }
 }

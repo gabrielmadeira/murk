@@ -1861,6 +1861,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd26e634ae03b94489580edc1925f477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Narrator: {fileID: 0}
+  pauseAudio: {fileID: 8300000, guid: 8351c9c6b4448b5428a7e24115737793, type: 3}
+  resumeAudio: {fileID: 8300000, guid: 8007d64c30b9b914d9944df49bca69f2, type: 3}
+  youExitedAudio: {fileID: 8300000, guid: 997a97b370deddb469d4134c95fd6f1c, type: 3}
+  debugModeTurnedOnAudio: {fileID: 8300000, guid: 71b63ea03c6cbfa429ba2c7ae0a23a97, type: 3}
+  debugModeTurnedOffAudio: {fileID: 8300000, guid: 7668759d85de0574ca2b820527e2013f, type: 3}
   pauseMenuUI: {fileID: 1465788732}
   DebugToggler: {fileID: 687927381}
 --- !u!1 &1945187909

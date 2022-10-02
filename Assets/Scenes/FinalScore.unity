@@ -272,8 +272,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb5c093a236bf33478013253229006c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resultTitleTMP: {fileID: 1813723457}
   goalsCollectedTMP: {fileID: 1413246363}
   timeLastedTMP: {fileID: 1992761510}
+  victoryAudio: {fileID: 8300000, guid: 5c6e74d32a98c564484de4481c2fda26, type: 3}
+  youScoredAudio: {fileID: 8300000, guid: 1bebea64786f60b438e4968125517b70, type: 3}
+  youSurvivedAudio: {fileID: 8300000, guid: 27d4fa459f96c4645bce8884a9d6823d, type: 3}
+  secondsAudio: {fileID: 8300000, guid: d8f43e89af3b51a4eb3a9d4e47f9e71a, type: 3}
 --- !u!1 &610211563
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,7 +840,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190227
-  m_fontColor: {r: 0.5754717, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 0.5764706, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

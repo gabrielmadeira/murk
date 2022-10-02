@@ -9,8 +9,10 @@ using UnityEngine.EventSystems;
 
 public class OptionsMenu : MonoBehaviour
 {
-    public GameObject ObjectMusic; // Universal narrator
+    public GameObject Narrator; // Universal narrator
     private AudioSource voiceAudioSrc; // Narrator audio source
+
+    private List<AudioClip> ClipstoPlay;
 
     public AudioClip enterSettingsAudio;
     public AudioClip quitSettingsAudio;
@@ -18,7 +20,7 @@ public class OptionsMenu : MonoBehaviour
     public AudioClip mapSizeChangedAudio;
     public AudioClip mapSizeSetToMin;
     public AudioClip mapSizeSetToMax;
-    public AudioClip mapSizeSetTo5;
+    public AudioClip mapSizeSetTo4;
     public AudioClip debugModeTurnOffAudio;
     public AudioClip debugModeTurnOnAudio;
     public AudioClip debugModeTurnedOffAudio;
@@ -36,8 +38,8 @@ public class OptionsMenu : MonoBehaviour
     public Toggle DebugToggler;
 
     void Start() {
-        ObjectMusic = GameObject.FindWithTag("Narrator");
-        voiceAudioSrc = ObjectMusic.GetComponent<AudioSource>();
+        Narrator = GameObject.FindWithTag("Narrator");
+        voiceAudioSrc = Narrator.GetComponent<AudioSource>();
 
         SizeSetter.text = (mapSizeX/5).ToString();
 
@@ -86,25 +88,34 @@ public class OptionsMenu : MonoBehaviour
 
     public void MapSize(string sizeText) { // Updates the size of the map
         MainMenu.uninterruptable = true;
+
         if (!int.TryParse(sizeText, out int size))
         {
-            size = 5; // If given size was not an int, uses size 5
-            PlayAudioClip(mapSizeSetTo5);
+            size = 4; // If given size was not an int, uses size 4
+            PlayAudioClip(mapSizeSetTo4);
         }
         else {
             if (size > 10)
             {
                 size = 10; // If given size was too big, lowers it
-                PlayAudioClip(mapSizeSetToMax);
+                DoNotDestroy.clipsToPlay.Add(mapSizeSetToMax);
             }
             else if (size < 1)
             {
                 size = 1; // If given size was too small, increases it
-                PlayAudioClip(mapSizeSetToMin);
+                DoNotDestroy.clipsToPlay.Add(mapSizeSetToMin);
             }
             else {
                 // Accepts the given size
-                PlayAudioClip(mapSizeChangedAudio);
+                DoNotDestroy.clipsToPlay.Add(mapSizeChangedAudio);
+            }
+
+            if (size != 10)
+                DoNotDestroy.clipsToPlay.Add(DoNotDestroy.shareableNumbers[size]); //Says what it was set to
+            else
+            {
+                DoNotDestroy.clipsToPlay.Add(DoNotDestroy.shareableNumbers[1]);
+                DoNotDestroy.clipsToPlay.Add(DoNotDestroy.shareableNumbers[0]);
             }
     
         }
@@ -140,4 +151,5 @@ public class OptionsMenu : MonoBehaviour
         voiceAudioSrc.clip = soundClip;
         voiceAudioSrc.Play();
     }
+
 }

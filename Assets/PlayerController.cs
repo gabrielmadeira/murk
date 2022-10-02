@@ -80,9 +80,10 @@ public class PlayerController : MonoBehaviour
         Vector3 currentVelocity = rb.velocity;
         Vector3 targetVelocity = new Vector3(move.x,0,move.y);
 
-        if (isSprinting)
+        if (isSprinting) // If the player is sprinting
         {
-            targetVelocity *= sprintSpeed;
+            float runningAngle = Vector3.Angle(targetVelocity, new Vector3(0,0,Vector3.Magnitude(targetVelocity))); // Gets the angle you are running to compared to where you are looking
+            targetVelocity *= speed + (sprintSpeed-speed)*Mathf.Cos(runningAngle/600*Mathf.PI); // Makes the player run slower the less forward it is facing
             breath *= 1-0.008f*Time.deltaTime;
         }
         else if (isSlower)
@@ -107,7 +108,7 @@ public class PlayerController : MonoBehaviour
         
         breath = Mathf.Max(Mathf.Min(breath, 1),0); // Limits cumulative breath maximum to 1 (100%)
 
-        targetVelocity *= breath; // Reduces the player's speed as it gets tired
+        targetVelocity *= breath; // Reduces the player's speed according to how tired it is
 
         //Align direction
         targetVelocity = transform.TransformDirection(targetVelocity);
@@ -236,12 +237,12 @@ public class PlayerController : MonoBehaviour
     // On collision with a monster, ends the game
     void OnCollisionEnter(Collision col) {
         if (col.gameObject.tag == "Monster") {
-            PlayAudioClip(youDiedAudio);
+            DoNotDestroy.clipsToPlay.Add(youDiedAudio);
             EndGame();
         }
     }
 
-    void EndGame() { // Ends game by going back to menu
+    void EndGame() { // Ends game by going to the score screen
         Cursor.lockState = CursorLockMode.Confined;
         SceneManager.LoadScene(3);
     }

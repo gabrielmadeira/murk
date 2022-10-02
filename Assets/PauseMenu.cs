@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+using UnityEngine.EventSystems;
+
 public class PauseMenu : MonoBehaviour
 {
     public GameObject Narrator; // Universal narrator
@@ -14,6 +16,14 @@ public class PauseMenu : MonoBehaviour
     public AudioClip youExitedAudio;
     public AudioClip debugModeTurnedOnAudio;
     public AudioClip debugModeTurnedOffAudio;
+    
+    public AudioClip resumeGameSelectedAudio;
+    public AudioClip debugModeSelectedAudio;
+    public AudioClip endGameSelectedAudio;
+    public AudioClip exitGameSelectedAudio;
+
+    GameObject currentSelected;
+    GameObject previouslySelected;
 
     public static bool gameIsPaused = false;
 
@@ -32,16 +42,47 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(MainMenu.uninterruptable && !voiceAudioSrc.isPlaying) // Turns off uninterruptable bool if the audio turned off
-            MainMenu.uninterruptable = false;
-
-        if (Input.GetKeyDown(KeyCode.E)) {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
             if (gameIsPaused)
             {
                 Resume();
             } else
             {
                 Pause();
+            }
+        }
+
+        if(MainMenu.uninterruptable && !voiceAudioSrc.isPlaying) // Turns off uninterruptable bool if the audio turned off
+            MainMenu.uninterruptable = false;
+
+        if (!MainMenu.uninterruptable) {
+            currentSelected = EventSystem.current.currentSelectedGameObject;
+            if (currentSelected && (!previouslySelected || (previouslySelected.name != currentSelected.name)))
+            {
+                if(currentSelected.name == "ResumeButton" && previouslySelected)
+                {
+                    previouslySelected = EventSystem.current.currentSelectedGameObject;
+                    PlayAudioClip(resumeGameSelectedAudio);
+                    print(currentSelected.name);
+                }
+                else if(currentSelected.name == "DebugToggle")
+                {
+                    previouslySelected = EventSystem.current.currentSelectedGameObject;
+                    PlayAudioClip(debugModeSelectedAudio);
+                    print(currentSelected.name);
+                }
+                else if(currentSelected.name == "MenuButton")
+                {
+                    previouslySelected = EventSystem.current.currentSelectedGameObject;
+                    PlayAudioClip(endGameSelectedAudio);
+                    print(currentSelected.name);
+                }
+                else if(currentSelected.name == "QuitButton")
+                {
+                    previouslySelected = EventSystem.current.currentSelectedGameObject;
+                    PlayAudioClip(exitGameSelectedAudio);
+                    print(currentSelected.name);
+                }
             }
         }
     }

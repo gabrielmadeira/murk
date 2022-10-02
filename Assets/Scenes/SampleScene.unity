@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 781998804}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &94957939
@@ -1867,6 +1867,10 @@ MonoBehaviour:
   youExitedAudio: {fileID: 8300000, guid: 997a97b370deddb469d4134c95fd6f1c, type: 3}
   debugModeTurnedOnAudio: {fileID: 8300000, guid: 71b63ea03c6cbfa429ba2c7ae0a23a97, type: 3}
   debugModeTurnedOffAudio: {fileID: 8300000, guid: 7668759d85de0574ca2b820527e2013f, type: 3}
+  resumeGameSelectedAudio: {fileID: 8300000, guid: bc4809d577f05bb4ebd7c1ad5b1179c5, type: 3}
+  debugModeSelectedAudio: {fileID: 8300000, guid: 21fd70ea435350946befd50b94aea55c, type: 3}
+  endGameSelectedAudio: {fileID: 8300000, guid: f2f0d50118246ff4797d9fe1a0f74342, type: 3}
+  exitGameSelectedAudio: {fileID: 8300000, guid: ebc5bbbba5ea8334eab54911918ee1ad, type: 3}
   pauseMenuUI: {fileID: 1465788732}
   DebugToggler: {fileID: 687927381}
 --- !u!1 &1945187909

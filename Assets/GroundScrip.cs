@@ -190,7 +190,7 @@ public class GroundScrip : MonoBehaviour
             envSound.GetComponent<AudioSource>().clip = envSoundsClips[i];
 
             envObjectsAndSounds.Add(envSound);
-            envObjectsAndSoundsDelay.Add(2*Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay)*envSoundsClips.Count);
+            envObjectsAndSoundsDelay.Add(Random.Range(minEnvObjectAndSoundDelay, maxEnvObjectAndSoundDelay)*envSoundsClips.Count/2);
         }
     }
 

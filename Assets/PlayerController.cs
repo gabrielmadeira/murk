@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     // - SOUND -------------- 
     public GameObject ObjectMusic; // Universal narrator
     private AudioSource voiceAudioSrc; // Narrator audio source
-    private float maximumLoudness = 0.5f;
+    private float maximumLoudness = 0.6f;
     private float pitchMultiplier = 0.8f;
 
     public AudioClip introAudio;
@@ -44,6 +44,10 @@ public class PlayerController : MonoBehaviour
  
     private float clipLoudness;
     private float[] clipSampleData;
+
+    private List<AudioSource> Noise3D; // All noise from thunder and wind
+    private float objLoudness;
+    private float envLoudness;
     //------------------------
 
     private bool isMoving = false;
@@ -150,6 +154,14 @@ public class PlayerController : MonoBehaviour
         clipSampleData = new float[sampleDataLength];
 
         PlayAudioClip(introAudio); // Passa instruções para o player
+
+        GameObject[] Noise3DObjects = GameObject.FindGameObjectsWithTag("EnvNoise"); // Gets all enviroment onjects
+
+        Noise3D = new List<AudioSource>();
+        for(int i = 0; i < Noise3DObjects.Length; i++) { // Gets the audio source of all enviroment sounds
+            Noise3D.Add(Noise3DObjects[i].GetComponent<AudioSource>());
+        }
+        
     }
 
     // Update is called once per frame
@@ -174,16 +186,20 @@ public class PlayerController : MonoBehaviour
 
             // Calcula a loudness dos passos do player
             stepingLoudness = ClipLoudnessCalculator(audioSrcSteps);
-            if (float.IsNaN(stepingLoudness))
-                stepingLoudness = 0f;
             
             // Calcula a loudness da respiração do player
             breathLoudness = ClipLoudnessCalculator(audioSrcBreath);
-            if (float.IsNaN(breathLoudness))
-                breathLoudness = 0f;
+
+            // Subtracts the ambience loudness
+            envLoudness = 0;
+            for(int i = 0; i < Noise3D.Count; i++) {
+                if (Noise3D[i].isPlaying)
+                    envLoudness += ClipLoudnessCalculator(Noise3D[i]);
+            }
+            //Debug.Log("steps:" + stepingLoudness + "  breath:" + breathLoudness + "  env:" + envLoudness/10);
 
             //Calcula a distancia até onde será ouvido o som do player.
-            audioReach = Mathf.Sqrt(500000*(stepingLoudness+breathLoudness)/maximumLoudness+1f);
+            audioReach = Mathf.Sqrt(500000*(Mathf.Max(0,stepingLoudness+breathLoudness-envLoudness/20))/maximumLoudness+1f); // 1f is the constant reach
 
             soundBroadcast.transform.localScale = new Vector3(audioReach, 0.1f, audioReach);   
         }
@@ -195,7 +211,12 @@ public class PlayerController : MonoBehaviour
         foreach (var sample in clipSampleData) {
             clipLoudness += Mathf.Abs(sample);
         }
-        return clipLoudness * audioSrc.volume / sampleDataLength;
+        float loudness = clipLoudness * audioSrc.volume / sampleDataLength;
+
+        if (float.IsNaN(loudness))
+            loudness = 0f;
+
+        return loudness;
     }
 
     void ChangeSoundSteps() {

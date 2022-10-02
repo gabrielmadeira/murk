@@ -275,10 +275,11 @@ MonoBehaviour:
   resultTitleTMP: {fileID: 1813723457}
   goalsCollectedTMP: {fileID: 1413246363}
   timeLastedTMP: {fileID: 1992761510}
-  victoryAudio: {fileID: 8300000, guid: 5c6e74d32a98c564484de4481c2fda26, type: 3}
   youScoredAudio: {fileID: 8300000, guid: 1bebea64786f60b438e4968125517b70, type: 3}
   youSurvivedAudio: {fileID: 8300000, guid: 27d4fa459f96c4645bce8884a9d6823d, type: 3}
+  minutesAudio: {fileID: 8300000, guid: 60980c53e436c70468403ad7e26eb82b, type: 3}
   secondsAudio: {fileID: 8300000, guid: d8f43e89af3b51a4eb3a9d4e47f9e71a, type: 3}
+  victoryAudio: {fileID: 8300000, guid: 5c6e74d32a98c564484de4481c2fda26, type: 3}
 --- !u!1 &610211563
 GameObject:
   m_ObjectHideFlags: 0

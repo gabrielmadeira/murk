@@ -12,10 +12,12 @@ public class GameOver : MonoBehaviour
 
     public AudioClip youScoredAudio;
     public AudioClip youSurvivedAudio;
+    public AudioClip minutesAudio;
     public AudioClip secondsAudio;
     public AudioClip victoryAudio;
 
     private float secondsSurvived;
+    private int minutesSurvived;
 
     // Start is called before the first frame update
     void Start()
@@ -39,33 +41,33 @@ public class GameOver : MonoBehaviour
 
         // Tells the number of goals collected
         DoNotDestroy.clipsToPlay.Add(youScoredAudio);
-        DoNotDestroy.clipsToPlay.Add(DoNotDestroy.shareableNumbers[MainMenu.goalsCollected]);
+        DoNotDestroy.playNumber(MainMenu.goalsCollected);
 
         // Shows the ammount of time the player survived for
-        secondsSurvived = Time.time-MainMenu.startOfTheGame;
-        timeLastedTMP.text = "You survived for: " + secondsSurvived + " seconds";
+        secondsSurvived = (Time.time-MainMenu.startOfTheGame);
+        minutesSurvived = (int)(secondsSurvived - secondsSurvived%60)/60;
+        secondsSurvived = (float)System.Math.Round(secondsSurvived%60,3);
 
         // Tells the ammount of time the player survived for
         DoNotDestroy.clipsToPlay.Add(youSurvivedAudio);
 
-        // Decomposes the number of seconds survived into a list of audio clips 
-        List<AudioClip> numberAudioList = new List<AudioClip>();
-        while  (secondsSurvived >= 10) {
-            numberAudioList.Add(DoNotDestroy.shareableNumbers[(int)(secondsSurvived%10)]);
-            secondsSurvived /= 10;
+        if (minutesSurvived > 0) {
+            DoNotDestroy.playNumber(minutesSurvived);        
+            DoNotDestroy.clipsToPlay.Add(minutesAudio); // Adds "minutes" for the number said to make sense
+            timeLastedTMP.text = "and survived for: " + minutesSurvived + " minutes and " + secondsSurvived + " seconds";
         }
-        numberAudioList.Add(DoNotDestroy.shareableNumbers[(int)(secondsSurvived%10)]);
-        numberAudioList.Reverse(); // Reverses the order so as to match english speaking pattern
+        else
+            timeLastedTMP.text = "and survived for: " + secondsSurvived + " seconds";
+        
 
-        DoNotDestroy.clipsToPlay.AddRange(numberAudioList); // Adds the clips representing the number to the list of clips to be played
-
+        DoNotDestroy.playNumber(secondsSurvived);
         DoNotDestroy.clipsToPlay.Add(secondsAudio); // Adds "seconds" for the number said to make sense
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.E)) // Leaves for menu
+        if (Input.GetKey(KeyCode.Escape)) // Leaves for menu
         {
             SceneManager.LoadScene(0);
         }

@@ -312,16 +312,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288ea6cd4c2e6a14fa9f2ddb87e41063, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  voiceAudioSrc: {fileID: 370870217}
+  Narrator: {fileID: 0}
   enterSettingsAudio: {fileID: 8300000, guid: dceb9cfd125e1c649b845af6b77784c9, type: 3}
   quitSettingsAudio: {fileID: 8300000, guid: c8074ca7f97a1f9448b5f50509cb756e, type: 3}
-  mapSizeSelectedAudio: {fileID: 8300000, guid: 44ab7ea3964fc8f4d875a2c3e2145062, type: 3}
+  mapSizeSelectedAudio: {fileID: 8300000, guid: 6b692b7aaa2857246858c813c1aa6f2c, type: 3}
   mapSizeChangedAudio: {fileID: 8300000, guid: 130e2c832a7fc164eb6fdfa744666f91, type: 3}
   mapSizeSetToMin: {fileID: 8300000, guid: fa894841d51814a4f956591c99b62934, type: 3}
   mapSizeSetToMax: {fileID: 8300000, guid: f5b6bb1f14fb91d4d8ae2fe56335f797, type: 3}
-  mapSizeSetTo5: {fileID: 8300000, guid: 6b28b41be7b4c294e8c9b05670225e68, type: 3}
-  debugModeTurnOffAudio: {fileID: 8300000, guid: 2d7f100be602f61498b27e7a968117bb, type: 3}
-  debugModeTurnOnAudio: {fileID: 8300000, guid: 4db8facfe468d954cb163c6d3ee67176, type: 3}
+  mapSizeSetTo4: {fileID: 8300000, guid: 6b28b41be7b4c294e8c9b05670225e68, type: 3}
+  debugModeTurnOffAudio: {fileID: 8300000, guid: 21fd70ea435350946befd50b94aea55c, type: 3}
+  debugModeTurnOnAudio: {fileID: 8300000, guid: 21fd70ea435350946befd50b94aea55c, type: 3}
   debugModeTurnedOffAudio: {fileID: 8300000, guid: 7668759d85de0574ca2b820527e2013f, type: 3}
   debugModeTurnedOnAudio: {fileID: 8300000, guid: 71b63ea03c6cbfa429ba2c7ae0a23a97, type: 3}
   SizeSetter: {fileID: 1961045957}

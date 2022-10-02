@@ -109,14 +109,7 @@ public class OptionsMenu : MonoBehaviour
                 // Accepts the given size
                 DoNotDestroy.clipsToPlay.Add(mapSizeChangedAudio);
             }
-
-            if (size != 10)
-                DoNotDestroy.clipsToPlay.Add(DoNotDestroy.shareableNumbers[size]); //Says what it was set to
-            else
-            {
-                DoNotDestroy.clipsToPlay.Add(DoNotDestroy.shareableNumbers[1]);
-                DoNotDestroy.clipsToPlay.Add(DoNotDestroy.shareableNumbers[0]);
-            }
+            DoNotDestroy.playNumber(size);
     
         }
         // Updates the toggler's text

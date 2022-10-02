@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5495494572884350963}
   m_Layer: 0
   m_Name: EnvSound
-  m_TagString: Untagged
+  m_TagString: EnvNoise
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1587,7 +1587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d01f70f0a313544aa83e22e1555b6a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numbers:
+  units:
   - {fileID: 8300000, guid: 9d819c7c73c935e42843314cd7acfb33, type: 3}
   - {fileID: 8300000, guid: 31bd38e2971d5f94db5986b519ec686b, type: 3}
   - {fileID: 8300000, guid: c5c848f38d44ad34da09616b568453f4, type: 3}
@@ -1598,6 +1598,28 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 87ad91fbd6aeba0438c1935645b90680, type: 3}
   - {fileID: 8300000, guid: df8ef62dc7f79904a8a60c44ad22a4b7, type: 3}
   - {fileID: 8300000, guid: 0614d4144151993408a33d9590dc53b6, type: 3}
+  - {fileID: 8300000, guid: 969427498d84b7b4eae46abb406e2339, type: 3}
+  - {fileID: 8300000, guid: 7f1d0e1b4e87395419ea063a2246db35, type: 3}
+  - {fileID: 8300000, guid: 5060ff5248841404e987b0ac4dc41ed7, type: 3}
+  - {fileID: 8300000, guid: bf3fc969604cd004ca77674354ff0328, type: 3}
+  - {fileID: 8300000, guid: f9ca3a9e6988c5c4b84ced318670a4b7, type: 3}
+  - {fileID: 8300000, guid: 7201f164311310d4896ad85603660d74, type: 3}
+  - {fileID: 8300000, guid: b76c46ed9f1f76441839b729bc99004d, type: 3}
+  - {fileID: 8300000, guid: 39ec2637934660a48a75265ae3175665, type: 3}
+  - {fileID: 8300000, guid: 7899d306f6e42aa4f8eb2e6cc71092a5, type: 3}
+  - {fileID: 8300000, guid: 9f741ec70a70ff546b768fab4c4d5fdb, type: 3}
+  tens:
+  - {fileID: 8300000, guid: 3acd87207355fa040908b0e6049fbd95, type: 3}
+  - {fileID: 8300000, guid: 354b421a7ac560742955bb04c3fc745b, type: 3}
+  - {fileID: 8300000, guid: 91d36ba341e845f42b9b74246ab18c6a, type: 3}
+  - {fileID: 8300000, guid: 32359438ae00b43498f7ae82d5130734, type: 3}
+  - {fileID: 8300000, guid: 93ac39694da5a2a458f5b163e4e0ce8d, type: 3}
+  - {fileID: 8300000, guid: f5fb305f6a5ebb944b32a57bf015565c, type: 3}
+  - {fileID: 8300000, guid: 03a27ace6163f5b4491f73e19b1794fe, type: 3}
+  - {fileID: 8300000, guid: b9a4824d33dbbb24ea9c63c0efc20cc1, type: 3}
+  hundred: {fileID: 8300000, guid: 741c01e262ce58043a4212e6e7f5ea85, type: 3}
+  thousand: {fileID: 8300000, guid: 96004e493899c7c4f8e0648cc1ca631e, type: 3}
+  point: {fileID: 8300000, guid: 338b8169503a48e489ee4b08e850bdbf, type: 3}
 --- !u!1 &1892077680
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ TagManager:
   - Monster
   - Narrator
   - Goal
+  - EnvNoise
   layers:
   - Default
   - TransparentFX

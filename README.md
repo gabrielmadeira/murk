@@ -6,6 +6,8 @@ Game's main goal: turn off radios across the map by surviving the monsters.
 
 This project was developed for the Human-Computer Interaction course at [INF](https://inf.ufrgs.br)-[UFRGS](https://ufrgs.br).
 
+![Murk's Idea](murk_idea.png "Murk's Idea")
+
 ![Murk Screens](murk_screens.png "Murk Screens")
 
 ![Interface Description](interface.png "Interface Description")
